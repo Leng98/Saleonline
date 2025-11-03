@@ -44,7 +44,7 @@
             z-index: 1000;
         }
         .modal-content {
-            background-color: #fff;
+            background-color: #ffffff; /* Reverted to white for light/clear appearance */
             padding: 24px;
             border-radius: 8px;
             text-align: center;
@@ -198,6 +198,17 @@
                     <input type="text" id="editCustomerAddress" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
                 </div>
                 
+                <!-- NEW: Store Name -->
+                <div class="pt-2">
+                    <label for="editStoreName" class="block text-sm font-medium text-gray-700">ហាង</label>
+                    <select id="editStoreName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                        <option value="វិក្កយបត្រ">វិក្កយបត្រ (Default)</option>
+                        <option value="CCR Online Store">CCR Online Store</option>
+                        <option value="YL 99CCR">YL 99CCR</option>
+                        <option value="CCR168">CCR168</option>
+                    </select>
+                </div>
+
                 <div class="pt-2">
                     <label for="editDeliveryOption" class="block text-sm font-medium text-gray-700">ជម្រើសសម្រាប់ការដឹកជញ្ជូន</label>
                     <select id="editDeliveryOption" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
@@ -211,6 +222,18 @@
                 <div class="pt-2">
                     <label for="editDeliveryFee" class="block text-sm font-medium text-gray-700">តម្លៃសេវាដឹក (ដុល្លារ)</label>
                     <input type="number" id="editDeliveryFee" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+
+                <!-- NEW: Payment Option -->
+                <div class="pt-2">
+                    <label for="editPaymentOption" class="block text-sm font-medium text-gray-700">ជម្រើសការទូទាត់ (កំណត់សម្គាល់ធនាគារ)</label>
+                    <input type="text" id="editPaymentOption" placeholder="ឧទា: ABA, Wing, True Emoney, តាមអ្នកដឹក" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+                
+                <!-- NEW: Payment Notes / TxD -->
+                <div class="pt-2">
+                    <label for="editPaymentNotes" class="block text-sm font-medium text-gray-700">កំណត់សម្គាល់បន្ថែម (លេខ TxD)</label>
+                    <input type="text" id="editPaymentNotes" placeholder="លេខ TxD" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
                 </div>
             </div>
             <div class="modal-buttons">
@@ -230,32 +253,37 @@
 
     <!-- Main Application Container -->
     <div id="mainApp" class="flex w-full flex-col hidden">
-        <!-- Top Navigation Bar -->
-        <nav class="bg-gray-900 text-white p-4 flex items-center justify-between flex-wrap">
+        <!-- Top Navigation Bar (Updated to Indigo 700) -->
+        <nav class="bg-indigo-700 text-white p-4 flex items-center justify-between flex-wrap">
             <div class="flex items-center gap-4 mb-2 sm:mb-0">
                 <!-- Nav buttons container: Use horizontal scroll and smaller gap/padding on mobile (sm: is for desktop size restore) -->
                 <div class="flex items-center space-x-1 overflow-x-auto pb-1 sm:space-x-2">
-                    <button id="dashboardNavBtn" class="px-3 py-1.5 text-sm rounded-md font-medium text-gray-700 bg-white hover:bg-gray-100 transition duration-300 flex items-center gap-1.5 sm:px-4 sm:py-2 sm:text-base sm:gap-2">
+                    <!-- Dashboard Button (Active Default Style) -->
+                    <button id="dashboardNavBtn" class="px-3 py-1.5 text-sm rounded-md font-medium text-white bg-indigo-900 hover:bg-indigo-800 transition duration-300 flex items-center gap-1.5 sm:px-4 sm:py-2 sm:text-base sm:gap-2">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
                         <span class="whitespace-nowrap">ផ្ទាំងគ្រប់គ្រង</span>
                     </button>
-                    <button id="customerInfoNavBtn" class="px-3 py-1.5 text-sm rounded-md font-medium text-gray-700 hover:bg-gray-100 transition duration-300 flex items-center gap-1.5 sm:px-4 sm:py-2 sm:text-base sm:gap-2">
+                    <!-- Customer Info Button (Inactive Default Style) -->
+                    <button id="customerInfoNavBtn" class="px-3 py-1.5 text-sm rounded-md font-medium text-indigo-100 hover:bg-indigo-600 transition duration-300 flex items-center gap-1.5 sm:px-4 sm:py-2 sm:text-base sm:gap-2">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zm-1.5 6a4.5 4.5 0 00-4.5 4.5V18h9v-1.5A4.5 4.5 0 0011.5 12z" clip-rule="evenodd" fill-rule="evenodd" /></svg>
                         <span class="whitespace-nowrap">ព័ត៌មានអតិថិជន</span>
                     </button>
-                    <button id="addItemNavBtn" class="px-3 py-1.5 text-sm rounded-md font-medium text-gray-700 hover:bg-gray-100 transition duration-300 flex items-center gap-1.5 sm:px-4 sm:py-2 sm:text-base sm:gap-2">
+                    <!-- Add Item Button (Inactive Default Style) -->
+                    <button id="addItemNavBtn" class="px-3 py-1.5 text-sm rounded-md font-medium text-indigo-100 hover:bg-indigo-600 transition duration-300 flex items-center gap-1.5 sm:px-4 sm:py-2 sm:text-base sm:gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                         </svg>
                         <span class="whitespace-nowrap">បន្ថែមទំនិញ</span>
                     </button>
-                    <button id="historyNavBtn" class="px-3 py-1.5 text-sm rounded-md font-medium text-gray-700 hover:bg-gray-100 transition duration-300 flex items-center gap-1.5 sm:px-4 sm:py-2 sm:text-base sm:gap-2">
+                    <!-- History Button (Inactive Default Style) -->
+                    <button id="historyNavBtn" class="px-3 py-1.5 text-sm rounded-md font-medium text-indigo-100 hover:bg-indigo-600 transition duration-300 flex items-center gap-1.5 sm:px-4 sm:py-2 sm:text-base sm:gap-2">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2.75 9a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H2.75z" fill-rule="evenodd" clip-rule="evenodd" /></svg>
                         <span class="whitespace-nowrap">មើលប្រវត្តិទិន្នន័យ</span>
                     </button>
                 </div>
             </div>
-            <button id="themeToggleBtn" class="p-2 rounded-md hover:bg-gray-200 transition duration-300">
+            <!-- Theme Toggle Button (Updated Hover Color) -->
+            <button id="themeToggleBtn" class="p-2 rounded-md hover:bg-indigo-600 transition duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" id="lightIcon" class="h-6 w-6 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                 <svg xmlns="http://www.w3.org/2000/svg" id="darkIcon" class="h-6 w-6 text-gray-200 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0015.354 20.354 9.003 9.003 0 0020.354 15.354z" /></svg>
             </button>
@@ -400,12 +428,12 @@
                                     <div class="flex items-center">
                                         <input id="trueEmoneyCheckbox" type="checkbox" name="payment" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                                         <label for="trueEmoneyCheckbox" class="ml-1 block text-sm text-gray-900 whitespace-nowrap">True Emoney</label>
-                                    </div>                                    
+                                    </div>      
                                     <div class="flex items-center">
                                         <input id="byDelivererCheckbox" type="checkbox" name="payment" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                                         <label for="byDelivererCheckbox" class="ml-1 block text-sm text-gray-900 whitespace-nowrap">តាមអ្នកដឹក</label>
                                     </div>
-                                
+                                    
                                     <!-- NEW Checkbox for Other Bank -->
                                     <div class="flex items-center">
                                         <input id="otherBankCheckbox" type="checkbox" name="payment" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
@@ -544,7 +572,7 @@
                 <!-- Add Item View -->
                 <div id="addItemView" class="hidden">
                     <div class="bg-white rounded-lg p-6 shadow-md space-y-4">
-                        <h2 class="text-xl font-semibold text-gray-700">បន្ថែមទំនិញថ្មី</h2>
+                        <h2 class="text-xl font-semibold text-gray-700">បន្ថែមទំនិញថ្មី </h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="newProductName" class="block text-sm font-medium text-gray-700">ឈ្មោះទំនិញ</label>
@@ -687,120 +715,8 @@
         const loadingView = document.getElementById('loadingView');
         
         let app = null;
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            
-            // Function to handle authentication, preferring custom token but falling back to anonymous
-            const initialAuth = async () => {
-                try {
-                    const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                    if (token) {
-                        // Attempt to sign in with the custom token provided by the environment
-                        await signInWithCustomToken(auth, token);
-                    } else {
-                        // Fallback to anonymous sign-in if no token is available
-                        await signInAnonymously(auth);
-                    }
-                } catch (authError) {
-                    console.warn("Custom token sign-in failed. Falling back to anonymous sign-in.", authError);
-                    // Handle custom-token-mismatch error by retrying with anonymous sign-in
-                    await signInAnonymously(auth);
-                }
-
-                // After a successful sign-in (either way), get the current user.
-                const user = auth.currentUser;
-                if (user) {
-                    userId = user.uid;
-                    isAuthReady = true;
-                    console.log("Authenticated as user:", userId);
-                    loadPublicData();
-                } else {
-                    console.error("Authentication failed. No user object available.");
-                    loadingView.style.display = 'none';
-                    mainApp.style.display = 'flex';
-                    showMessage('ការផ្ទៀងផ្ទាត់បរាជ័យ។ សូមពិនិត្យមើលការកំណត់រចនាសម្ព័ន្ធ Firebase របស់អ្នក។');
-                }
-            };
-            initialAuth();
-        } catch (error) {
-            console.error("Firebase Initialization Error:", error);
-            document.getElementById('loadingView').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'flex';
-            document.getElementById('contentArea').innerHTML = `
-                <div class="max-w-xl mx-auto bg-white rounded-xl shadow-lg p-8 text-center text-red-600">
-                    <p class="text-xl font-bold mb-4">មានបញ្ហាក្នុងការភ្ជាប់ Firebase!</p>
-                    <p>សូមបើកកូដរបស់អ្នក ហើយបន្លែមព័ត៌មាន <span class="font-mono">firebaseConfig</span> របស់គម្រោងអ្នក។</p>
-                </div>
-            `;
-        }
-
-        /**
-         * Loads public data (invoices and products) from Firestore using real-time listeners.
-         */
-        async function loadPublicData() {
-            loadingView.style.display = 'flex';
-            mainApp.style.display = 'none';
-            
-            try {
-                if (unsubscribeInvoices) {
-                    unsubscribeInvoices();
-                }
-                if (unsubscribeProducts) {
-                    unsubscribeProducts();
-                }
-
-                // Collection paths for public data
-                const invoicesCollectionRef = collection(db, `artifacts/${appId}/public/data/invoices`);
-                const productsCollectionRef = collection(db, `artifacts/${appId}/public/data/products`);
-
-                // Real-time listener for invoices (History)
-                unsubscribeInvoices = onSnapshot(invoicesCollectionRef, (querySnapshot) => {
-                    historyInvoices = [];
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        historyInvoices.push({
-                            id: doc.id,
-                            // Ensure timestamp fields are handled correctly
-                            timestamp: data.timestamp || new Date(), 
-                            lastBulkPrinted: data.lastBulkPrinted || null, // NEW FIELD
-                            ...data
-                        });
-                    });
-                    // Ensure the newest invoices are first for easy access
-                    historyInvoices.sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate());
-                    
-                    populateProductDatalist();
-                    renderHistoryList();
-                    updateDashboard();
-                });
-
-                // Real-time listener for products (Add Item page list and datalist source)
-                unsubscribeProducts = onSnapshot(productsCollectionRef, (querySnapshot) => {
-                    products = [];
-                    querySnapshot.forEach((doc) => {
-                        products.push({
-                            id: doc.id,
-                            ...doc.data()
-                        });
-                    });
-                    renderProductsList();
-                    populateProductDatalist();
-                });
-                
-                loadingView.style.display = 'none';
-                mainApp.style.display = 'flex';
-                
-            } catch (error) {
-                console.error("Firestore error:", error);
-                loadingView.style.display = 'none';
-                mainApp.style.display = 'flex';
-                showMessage('មានបញ្ហាក្នុងការផ្ទុកទិន្នន័យ។ សូមព្យាយាមម្ដងទៀត។');
-            }
-        }
         
-        // --- Modal/Message Box Functions ---
+        // --- DOM REFERENCES ---
         const messageModal = document.getElementById('messageModal');
         const modalMessage = document.getElementById('modalMessage');
         const modalOkBtn = document.getElementById('modalOkBtn');
@@ -819,51 +735,15 @@
         const editDeliveryFeeInput = document.getElementById('editDeliveryFee');
         const editSaveBtn = document.getElementById('editSaveBtn');
         const editCancelBtn = document.getElementById('editCancelBtn');
+        // NEW Edit modal elements
+        const editStoreNameSelect = document.getElementById('editStoreName');
+        const editPaymentOptionInput = document.getElementById('editPaymentOption');
+        const editPaymentNotesInput = document.getElementById('editPaymentNotes');
+
 
         let confirmationCallback = null;
 
-        const showMessage = (message) => {
-            modalMessage.textContent = message;
-            modalRichContent.innerHTML = ''; // Clear rich content for simple messages
-            messageModal.style.display = 'flex';
-        };
-        
-        const showRichMessage = (title, htmlContent) => {
-            modalMessage.textContent = title;
-            modalRichContent.innerHTML = htmlContent;
-            messageModal.style.display = 'flex';
-        };
-
-        const showConfirmation = (message, callback) => {
-            confirmMessage.textContent = message;
-            confirmationCallback = callback;
-            confirmModal.style.display = 'flex';
-        };
-
-        if(modalOkBtn) {
-            modalOkBtn.addEventListener('click', () => {
-                messageModal.style.display = 'none';
-            });
-        }
-
-        if(confirmYesBtn) {
-            confirmYesBtn.addEventListener('click', () => {
-                confirmModal.style.display = 'none';
-                if (confirmationCallback) {
-                    confirmationCallback(true);
-                }
-            });
-        }
-        if(confirmNoBtn) {
-            confirmNoBtn.addEventListener('click', () => {
-                confirmModal.style.display = 'none';
-                if (confirmationCallback) {
-                    confirmationCallback(false);
-                }
-            });
-        }
-
-        // Get all necessary HTML elements
+        // Get all necessary HTML elements (continued)
         const dashboardView = document.getElementById('dashboardView');
         const customerInfoView = document.getElementById('customerInfoView');
         const addItemView = document.getElementById('addItemView');
@@ -936,10 +816,28 @@
         // NEW Dashboard Filter Elements
         const dashboardDeliveryFilter = document.getElementById('dashboardDeliveryFilter');
         const dashboardPaymentStatusFilter = document.getElementById('dashboardPaymentStatusFilter');
-
         
-        // --- Phone Formatting and Cleaning Utilities ---
+        
+        // --- FUNCTION DEFINITIONS (Moved up to ensure hoisting is not an issue for const/async functions) ---
+        
+        const showMessage = (message) => {
+            modalMessage.textContent = message;
+            modalRichContent.innerHTML = ''; 
+            messageModal.style.display = 'flex';
+        };
+        
+        const showRichMessage = (title, htmlContent) => {
+            modalMessage.textContent = title;
+            modalRichContent.innerHTML = htmlContent;
+            messageModal.style.display = 'flex';
+        };
 
+        const showConfirmation = (message, callback) => {
+            confirmMessage.textContent = message;
+            confirmationCallback = callback;
+            confirmModal.style.display = 'flex';
+        };
+        
         /**
          * Removes all non-digit characters from a string.
          * @param {string} numberString - The input string (may contain spaces/dashes).
@@ -949,22 +847,25 @@
 
         /**
          * Formats the phone number input to the Cambodian standard (max 10 digits, 0-prefix, XXX XXX XXXX spacing).
+         * Ensures cursor position is maintained during input.
          * @param {HTMLInputElement} input - The phone input element.
+         * @returns {void}
          */
         const formatPhoneNumber = (input) => {
-            let cleanNumber = cleanPhoneNumber(input.value);
+            const originalValue = input.value;
+            const originalCursorPos = input.selectionStart;
+
+            // 1. Clean the original value
+            let cleanNumber = cleanPhoneNumber(originalValue);
             
-            // 1. Auto '0' Prefix Logic (only if the field is not empty and doesn't start with 0)
+            // 2. Apply '0' Prefix Logic and limit length
             if (cleanNumber.length > 0 && cleanNumber[0] !== '0') {
-                 // Prepend '0' if they started with another digit
                  cleanNumber = '0' + cleanNumber;
             }
-
-            // 2. Limit length to max 10 digits
             const MAX_DIGITS = 10;
             cleanNumber = cleanNumber.substring(0, MAX_DIGITS);
 
-            // 3. Apply Formatting: XXX XXX XXXX (Space after 3rd and 6th digits only)
+            // 3. Determine new formatted string
             let formattedNumber = '';
             
             if (cleanNumber.length > 0) {
@@ -974,15 +875,54 @@
                 formattedNumber += ' ' + cleanNumber.substring(3, 6);
             }
             if (cleanNumber.length > 6) {
-                // Digits 7 to 10 (no more spaces)
                 formattedNumber += ' ' + cleanNumber.substring(6, 10);
             }
             
+            // 4. Calculate new cursor position (where cursor was, ignoring previous spaces)
+            const getSpaceCount = (str, index) => {
+                let count = 0;
+                for (let i = 0; i < index; i++) {
+                    if (str[i] === ' ') {
+                        count++;
+                    }
+                }
+                return count;
+            };
+
+            // Calculate position in the clean string
+            const cleanCursorPos = originalCursorPos - getSpaceCount(originalValue, originalCursorPos);
+
+            // Calculate new position in the formatted string, including new spaces
+            let newCursorPos = cleanCursorPos + getSpaceCount(formattedNumber, cleanCursorPos);
+            
+            // If the user deletes a character, ensure the cursor doesn't jump backwards by more than 1
+            if (originalValue.length > formattedNumber.length) {
+                // If a space was deleted just before the cursor, the cursor should move one back.
+                if (originalValue[originalCursorPos - 1] === ' ' && formattedNumber[originalCursorPos - 2] !== ' ') {
+                    newCursorPos = originalCursorPos - 1;
+                } else if (originalValue[originalCursorPos - 1] !== ' ' && formattedNumber[originalCursorPos - 2] === ' '){
+                     // A digit was deleted, and the previous character is now a space (e.g. 012 345 | -> 012 34|)
+                    newCursorPos = originalCursorPos - 1; 
+                } else {
+                    newCursorPos = originalCursorPos - (originalValue.length - formattedNumber.length);
+                }
+                
+            } else if (originalValue.length < formattedNumber.length) {
+                // If the input caused a space to be added, move cursor ahead one extra step for the space.
+                if (formattedNumber[newCursorPos - 1] === ' ' && originalValue[originalCursorPos - 1] !== ' ') {
+                    newCursorPos++;
+                }
+            }
+
+            // Final safety check
+            newCursorPos = Math.min(newCursorPos, formattedNumber.length);
+            newCursorPos = Math.max(0, newCursorPos);
+
+            // 5. Apply the new value and position
             input.value = formattedNumber;
+            input.setSelectionRange(newCursorPos, newCursorPos);
         };
-
-        // --- Conditional Display Logic for Other Payment Input ---
-
+        
         const toggleOtherPaymentInput = () => {
             if (otherBankCheckbox && otherPaymentMethodContainer) {
                 if (otherBankCheckbox.checked) {
@@ -990,12 +930,11 @@
                     otherPaymentMethodInput.focus();
                 } else {
                     otherPaymentMethodContainer.classList.add('hidden');
-                    otherPaymentMethodInput.value = ''; // Clear value when hidden
+                    otherPaymentMethodInput.value = ''; 
                 }
             }
         };
-
-        // Function to handle exclusive checkbox selection for store names
+        
         const handleStoreSelection = (selectedCheckbox) => {
             [ccrOnlineCheckbox, yl99CcrCheckbox, ccr168Checkbox].forEach(checkbox => {
                 if (checkbox !== selectedCheckbox) {
@@ -1003,99 +942,22 @@
                 }
             });
         };
-        // Function to handle exclusive checkbox selection for payment methods
+        
         const handlePaymentSelection = (selectedCheckbox) => {
             [acCheckbox, abaCheckbox, wingCheckbox, trueEmoneyCheckbox, byDelivererCheckbox, otherBankCheckbox].forEach(checkbox => {
                 if (checkbox !== selectedCheckbox) {
                     checkbox.checked = false;
                 }
             });
-            // Also call the visibility toggle after changing selection
             toggleOtherPaymentInput();
         };
-
-        if (ccrOnlineCheckbox) ccrOnlineCheckbox.addEventListener('change', () => handleStoreSelection(ccrOnlineCheckbox));
-        if (yl99CcrCheckbox) yl99CcrCheckbox.addEventListener('change', () => handleStoreSelection(yl99CcrCheckbox));
-        if (ccr168Checkbox) ccr168Checkbox.addEventListener('change', () => handleStoreSelection(ccr168Checkbox));
-        
-        if (acCheckbox) acCheckbox.addEventListener('change', () => handlePaymentSelection(acCheckbox));
-        if (abaCheckbox) abaCheckbox.addEventListener('change', () => handlePaymentSelection(abaCheckbox));
-        if (wingCheckbox) wingCheckbox.addEventListener('change', () => handlePaymentSelection(wingCheckbox));
-        if (trueEmoneyCheckbox) trueEmoneyCheckbox.addEventListener('change', () => handlePaymentSelection(trueEmoneyCheckbox));
-        if (byDelivererCheckbox) byDelivererCheckbox.addEventListener('change', () => handlePaymentSelection(byDelivererCheckbox));
-        
-        // Use the combined handler for the Other Bank checkbox
-        if (otherBankCheckbox) otherBankCheckbox.addEventListener('change', () => {
-             handlePaymentSelection(otherBankCheckbox); 
-             toggleOtherPaymentInput();
-        }); 
-
-        
-        // Autocomplete customer data from history
-        let debounceTimer;
-        customerPhoneInput.addEventListener('input', () => {
-            // Store the current cursor position before changes
-            const currentCursorPos = customerPhoneInput.selectionStart;
-            const originalValue = customerPhoneInput.value;
-            let currentClean = cleanPhoneNumber(originalValue);
-            
-            // --- Auto '0' Prefix Logic ---
-            let prependZero = false;
-            if (currentClean.length > 0 && currentClean[0] !== '0') {
-                 currentClean = '0' + currentClean;
-                 prependZero = true;
-            }
-
-            // Set the value (with potential prepended '0') and format
-            customerPhoneInput.value = currentClean;
-            formatPhoneNumber(customerPhoneInput);
-            
-            // --- Cursor Position Adjustment (Simplified) ---
-            let newCursorPos = currentCursorPos;
-            if (prependZero) {
-                 newCursorPos++; // Move cursor one step forward due to prepended '0'
-            }
-            
-            // If the length changed due to formatting, try to maintain a sensible position
-            const newLength = customerPhoneInput.value.length;
-            if (newCursorPos > newLength) {
-                newCursorPos = newLength;
-            }
-            
-            // We'll rely on the browser's native cursor handling for the format, 
-            // as precise manual control is overly complex for this level of app.
-            // We just ensure we don't jump back to the start if 0 was prepended.
-            customerPhoneInput.setSelectionRange(newCursorPos, newCursorPos);
-
-            // --- Autocomplete Logic ---
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                const finalCleanPhone = cleanPhoneNumber(customerPhoneInput.value);
-                if (finalCleanPhone.length >= 7) { 
-                    const latestInvoice = historyInvoices
-                        .filter(invoice => cleanPhoneNumber(invoice.customerPhone) === finalCleanPhone)
-                        .sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate())[0];
-                    
-                    if (latestInvoice) {
-                        showConfirmation("អតិថិជនចាស់ តើអ្នកចង់អោយកម្មវិធីបំពេញជំនួសទេ", (result) => {
-                            if (result) {
-                                fillCustomerData(latestInvoice);
-                            }
-                        });
-                    }
-                }
-            }, 500);
-        });
 
         const fillCustomerData = (invoice) => {
             customerNameInput.value = invoice.customerName || '';
             customerAddressInput.value = invoice.customerAddress || '';
-            
-            // Use the formatter to clean up the historical phone number value when filling
             customerPhoneInput.value = invoice.customerPhone || '';
             formatPhoneNumber(customerPhoneInput); 
 
-            // Reset and check the correct delivery option
             vetRadio.checked = false;
             jtRadio.checked = false;
             phnompenhRadio.checked = false;
@@ -1105,11 +967,9 @@
             else if (invoice.deliveryOption === 'ភ្នំពេញ') phnompenhRadio.checked = true;
         };
 
-        // Function to populate the product datalist with unique product names
         const populateProductDatalist = () => {
             productNamesDatalist.innerHTML = '';
             const allProductNames = new Set();
-            // Add products only from the dedicated products collection (as requested)
             products.forEach(product => {
                 if (product.name) {
                     allProductNames.add(product.name);
@@ -1123,7 +983,62 @@
             });
         };
 
-        // Function to add a new item to the local sales list
+        const getStoreName = () => {
+            if (ccrOnlineCheckbox.checked) return 'CCR Online Store';
+            if (yl99CcrCheckbox.checked) return 'YL 99CCR';
+            if (ccr168Checkbox.checked) return 'CCR168';
+            return 'វិក្កយបត្រ';
+        };
+
+        const getDeliveryOptions = () => {
+            if (vetRadio.checked) return 'VET';
+            if (jtRadio.checked) return 'J&T';
+            if (phnompenhRadio.checked) return 'ភ្នំពេញ';
+            return 'មិនបានជ្រើសរើស';
+        };
+
+        const getPaymentOptions = () => {
+            let options = [];
+            if (acCheckbox.checked) options.push('AC');
+            if (abaCheckbox.checked) options.push('ABA');
+            if (wingCheckbox.checked) options.push('Wing');
+            if (trueEmoneyCheckbox.checked) options.push('True Emoney'); 
+            if (byDelivererCheckbox.checked) options.push('តាមអ្នកដឹក');
+            
+            if (otherBankCheckbox.checked) {
+                const customPayment = otherPaymentMethodInput.value.trim();
+                options.push(customPayment || 'ធនាគារផ្សេង'); 
+            }
+            
+            return options.join(', ') || 'មិនទាន់វេទឹកប្រាក់';
+        };
+        
+        const clearFormInputs = () => {
+            customerNameInput.value = '';
+            customerPhoneInput.value = '';
+            customerAddressInput.value = '';
+            vetRadio.checked = false;
+            jtRadio.checked = false;
+            phnompenhRadio.checked = false;
+            ccrOnlineCheckbox.checked = false;
+            yl99CcrCheckbox.checked = false;
+            ccr168Checkbox.checked = false;
+            acCheckbox.checked = false;
+            abaCheckbox.checked = false;
+            wingCheckbox.checked = false;
+            trueEmoneyCheckbox.checked = false;
+            byDelivererCheckbox.checked = false;
+            otherBankCheckbox.checked = false; 
+            otherPaymentMethodInput.value = ''; 
+            toggleOtherPaymentInput(); 
+            paymentNotesInput.value = '';
+            deliveryFeeInput.value = '';
+            itemNameInput.value = '';
+            itemQuantityInput.value = '1';
+            itemPriceInput.value = '';
+            itemNameInput.focus();
+        };
+
         const addItem = () => {
             const name = itemNameInput.value.trim();
             const quantity = parseFloat(itemQuantityInput.value);
@@ -1162,7 +1077,6 @@
             renderSalesList();
         };
         
-        // Function to add a new product to the database
         const addNewProduct = async () => {
             const productName = newProductNameInput.value.trim();
             const productPrice = parseFloat(newProductPriceInput.value);
@@ -1173,7 +1087,6 @@
             }
 
             try {
-                // Check if product already exists (case-insensitive for simplicity)
                 const existingProduct = products.find(p => p.name.toLowerCase() === productName.toLowerCase());
                 
                 if (existingProduct) {
@@ -1195,10 +1108,8 @@
             }
         };
 
-        // Function to render the list of products on the Add Item view
         const renderProductsList = () => {
             productsListBody.innerHTML = '';
-            // Sort products alphabetically
             const sortedProducts = [...products].sort((a, b) => (a.name || "").localeCompare(b.name || "", 'km'));
             sortedProducts.forEach(product => {
                 const row = document.createElement('tr');
@@ -1217,7 +1128,6 @@
             });
         };
 
-        // Function to delete a product from the database
         const deleteProductFromDB = (e) => {
             const docId = e.currentTarget.dataset.docId;
             showConfirmation('តើអ្នកពិតជាចង់លុបទំនិញនេះមែនទេ?', async (result) => {
@@ -1233,9 +1143,6 @@
             });
         };
 
-        /**
-         * Opens the modal for editing customer information of a saved invoice.
-         */
         const openEditModal = async (event) => {
             const docId = event.currentTarget.dataset.docId;
             const invoice = historyInvoices.find(inv => inv.id === docId);
@@ -1249,15 +1156,18 @@
             editCustomerNameInput.value = invoice.customerName || '';
             editCustomerPhoneInput.value = invoice.customerPhone || '';
             editCustomerAddressInput.value = invoice.customerAddress || '';
+            
+            // Populate new fields
+            editStoreNameSelect.value = invoice.storeName || 'វិក្កយបត្រ';
+            editPaymentOptionInput.value = invoice.paymentOption || '';
+            editPaymentNotesInput.value = invoice.paymentNotes || '';
+
             editDeliveryOptionSelect.value = invoice.deliveryOption || 'មិនបានជ្រើសរើស';
             editDeliveryFeeInput.value = (invoice.deliveryFee || 0).toFixed(2);
 
             editModal.style.display = 'flex';
         };
 
-        /**
-         * Saves the edited customer data back to Firestore.
-         */
         const saveEditedInvoice = async () => {
             const docId = editDocIdInput.value;
             const updatedCustomerName = editCustomerNameInput.value.trim();
@@ -1265,6 +1175,11 @@
             const updatedCustomerAddress = editCustomerAddressInput.value.trim();
             const updatedDeliveryOption = editDeliveryOptionSelect.value;
             const updatedDeliveryFee = parseFloat(editDeliveryFeeInput.value) || 0;
+            // Read new fields
+            const updatedStoreName = editStoreNameSelect.value;
+            const updatedPaymentOption = editPaymentOptionInput.value.trim();
+            const updatedPaymentNotes = editPaymentNotesInput.value.trim();
+
 
             if (!updatedCustomerName || !updatedCustomerPhone || !updatedCustomerAddress) {
                 showMessage('សូមបំពេញឈ្មោះ លេខទូរស័ព្ទ និងអាសយដ្ឋាន។');
@@ -1273,12 +1188,35 @@
 
             try {
                 const docRef = doc(db, `artifacts/${appId}/public/data/invoices`, docId);
+                
+                // Check TxD conflict only if TxD is provided and document ID is different
+                if (updatedPaymentNotes.length > 0) {
+                    const conflictingInvoice = historyInvoices.find(invoice => 
+                        (invoice.paymentNotes || '').trim().toLowerCase() === updatedPaymentNotes.toLowerCase() && invoice.id !== docId
+                    );
+                    if (conflictingInvoice) {
+                        showRichMessage('លេខសម្គាល់TxD/កំណត់សម្គាល់នេះមានរួចហើយនៅក្នុងវិក្កយបត្រផ្សេង!', `
+                            <p class="text-red-600 font-bold mb-3">ការព្រមាន៖ លេខ TxD នេះត្រូវបានប្រើប្រាស់រួចហើយដោយវិក្កយបត្រ ${conflictingInvoice.invoiceNumber || 'N/A'}។</p>
+                            <div class="modal-buttons">
+                                <button onclick="document.getElementById('messageModal').style.display = 'none';" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition duration-300">បិទ</button>
+                            </div>
+                            <p class="mt-3 text-sm text-gray-700">សូមកែតម្រូវលេខ TxD នេះ ឬបន្តប្រសិនបើអ្នកប្រាកដថាលេខនេះត្រឹមត្រូវ។</p>
+                        `);
+                        // Stop the save until the user manually closes the rich message modal.
+                        return;
+                    }
+                }
+
                 await updateDoc(docRef, {
                     customerName: updatedCustomerName,
                     customerPhone: updatedCustomerPhone,
                     customerAddress: updatedCustomerAddress,
                     deliveryOption: updatedDeliveryOption,
                     deliveryFee: updatedDeliveryFee,
+                    // NEW: Update fields
+                    storeName: updatedStoreName,
+                    paymentOption: updatedPaymentOption,
+                    paymentNotes: updatedPaymentNotes,
                     updatedAt: new Date()
                 });
 
@@ -1291,7 +1229,6 @@
             }
         };
 
-        // Function to delete an item from the database
         const deleteItemFromDB = async (e) => {
             const docId = e.currentTarget.dataset.docId;
             try {
@@ -1307,7 +1244,12 @@
             }
         };
 
-        // Function to render the current sales list table
+        const deleteLocalItem = (e) => {
+            const index = e.target.dataset.index;
+            currentInvoiceItems.splice(index, 1);
+            renderSalesList();
+        };
+
         const renderSalesList = () => {
             salesListBody.innerHTML = '';
             let totalAmount = 0;
@@ -1336,15 +1278,7 @@
                 button.addEventListener('click', deleteLocalItem);
             });
         };
-        
-        // Function to delete an item from the local array
-        const deleteLocalItem = (e) => {
-            const index = e.target.dataset.index;
-            currentInvoiceItems.splice(index, 1);
-            renderSalesList();
-        };
 
-        // Function to manage the visibility and count of the multi-print bar
         const updateSelectionDisplay = () => {
             const count = selectedInvoiceIds.size;
             selectedCountDisplay.textContent = `${count} វិក្កយបត្របានជ្រើសរើស`;
@@ -1358,17 +1292,12 @@
             }
         };
 
-        /**
-         * Renders the pagination controls based on total filtered items.
-         * @param {number} totalItems - Total number of items after filtering.
-         */
         const renderPaginationControls = (totalItems) => {
             const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
             paginationControls.innerHTML = '';
 
             if (totalPages <= 1) return;
 
-            // Function to create a page button
             const createPageButton = (page, text, disabled) => {
                 const btn = document.createElement('button');
                 btn.textContent = text;
@@ -1381,16 +1310,13 @@
                 btn.addEventListener('click', () => {
                     currentPage = page;
                     renderHistoryList();
-                    // Scroll to top of history container for better UX
                     document.getElementById('historyView').scrollIntoView({ behavior: 'smooth' });
                 });
                 return btn;
             };
 
-            // Previous Button
             paginationControls.appendChild(createPageButton(currentPage - 1, 'មុន', currentPage === 1));
 
-            // Logic to display limited pages (e.g., 5 pages around current page)
             let startPage = Math.max(1, currentPage - 2);
             let endPage = Math.min(totalPages, currentPage + 2);
 
@@ -1426,19 +1352,12 @@
                 paginationControls.appendChild(createPageButton(totalPages, totalPages.toString(), false));
             }
 
-            // Next Button
             paginationControls.appendChild(createPageButton(currentPage + 1, 'បន្ទាប់', currentPage === totalPages));
         };
 
-        // NEW: Select/Deselect all visible filtered invoices
         const selectAllInvoices = () => {
             const allCheckboxes = document.querySelectorAll('.invoice-select-checkbox');
-            // Determine if we should select all (if count < total visible checkboxes)
-            
-            // Clear the selection of only the currently visible invoices
             const visibleIds = new Set(Array.from(allCheckboxes).map(cb => cb.dataset.invoiceId));
-            
-            // If the current selection size equals the visible count, we are in Deselect All mode for the current filter.
             const currentlySelectedVisibleCount = Array.from(allCheckboxes).filter(cb => selectedInvoiceIds.has(cb.dataset.invoiceId)).length;
             const toggleToSelect = currentlySelectedVisibleCount < allCheckboxes.length;
 
@@ -1454,7 +1373,6 @@
                 }
             });
 
-            // Update button text and style dynamically
             const allSelected = allCheckboxes.length > 0 && selectedInvoiceIds.size === allCheckboxes.length;
             selectAllBtn.textContent = allSelected ? 'ជម្រះការជ្រើសរើស' : 'ជ្រើសរើសទាំងអស់';
             selectAllBtn.classList.toggle('bg-gray-300', !allSelected);
@@ -1466,7 +1384,6 @@
             updateSelectionDisplay();
         };
 
-        // NEW: Function to handle individual checkbox change on history list
         const handleCheckboxChange = (event) => {
             const invoiceId = event.target.dataset.invoiceId;
             if (event.target.checked) {
@@ -1476,9 +1393,9 @@
             }
             updateSelectionDisplay();
             
-            // Update select all button state
             const allVisibleCheckboxes = document.querySelectorAll('.invoice-select-checkbox');
-            const allSelected = allVisibleCheckboxes.length > 0 && selectedInvoiceIds.size === allVisibleCheckboxes.length;
+            const visibleSelectedCount = Array.from(allVisibleCheckboxes).filter(cb => selectedInvoiceIds.has(cb.dataset.invoiceId)).length;
+            const allSelected = allVisibleCheckboxes.length > 0 && visibleSelectedCount === allVisibleCheckboxes.length;
             selectAllBtn.textContent = allSelected ? 'ជម្រះការជ្រើសរើស' : 'ជ្រើសរើសទាំងអស់';
             selectAllBtn.classList.toggle('bg-gray-300', !allSelected);
             selectAllBtn.classList.toggle('text-gray-800', !allSelected);
@@ -1487,45 +1404,36 @@
             selectAllBtn.classList.toggle('text-white', allSelected);
         };
 
-        // Function to render the history list in a card view format
         const renderHistoryList = () => {
             const query = searchQueryInput.value.toLowerCase().trim();
             const filterStartDate = historyStartDateInput.value ? new Date(historyStartDateInput.value) : null;
             const filterEndDate = historyEndDateInput.value ? new Date(historyEndDateInput.value) : null;
 
-            // Reset selection state (only keep valid IDs from the current history)
-            const currentValidIds = new Set(historyInvoices.map(inv => inv.id));
-            selectedInvoiceIds = new Set([...selectedInvoiceIds].filter(id => currentValidIds.has(id)));
+            selectedInvoiceIds = new Set([...selectedInvoiceIds].filter(id => historyInvoices.map(inv => inv.id).includes(id)));
 
-            // 1. Filtering Logic (as before)
             const filteredInvoices = historyInvoices.filter((invoice) => {
                 const customerName = (invoice.customerName || '').toLowerCase();
                 const customerPhone = (invoice.customerPhone || '').toLowerCase();
                 const customerAddress = (invoice.customerAddress || '').toLowerCase();
                 const invoiceNumber = (invoice.invoiceNumber || '').toLowerCase();
                 
-                // Search in item names
                 const hasMatchingItem = invoice.items.some(item => (item.name || '').toLowerCase().includes(query));
 
-                // Date Filtering Logic
                 let matchesDate = true;
                 const invoiceDate = invoice.timestamp.toDate();
                 if (filterStartDate) {
-                    // Set time to start of day for comparison
                     const startOfDay = new Date(filterStartDate.getFullYear(), filterStartDate.getMonth(), filterStartDate.getDate(), 0, 0, 0);
                     if (invoiceDate < startOfDay) {
                         matchesDate = false;
                     }
                 }
                 if (filterEndDate) {
-                    // Set time to end of day for comparison
                     const endOfDay = new Date(filterEndDate.getFullYear(), filterEndDate.getMonth(), filterEndDate.getDate(), 23, 59, 59);
                     if (invoiceDate > endOfDay) {
                         matchesDate = false;
                     }
                 }
 
-                // Search Query Filtering Logic
                 const matchesSearch = invoiceNumber.includes(query) ||
                         customerName.includes(query) ||
                         customerPhone.includes(query) ||
@@ -1535,36 +1443,29 @@
                 return matchesDate && (query.length === 0 || matchesSearch);
             });
 
-            // 2. Pagination Calculation
             const totalItems = filteredInvoices.length;
             const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-            // Ensure current page is valid after filtering
             if (currentPage > totalPages) {
                 currentPage = Math.max(1, totalPages);
             }
             if (currentPage < 1 && totalPages > 0) {
                  currentPage = 1;
             } else if (totalPages === 0) {
-                 currentPage = 1; // Or keep 1 if no items
+                 currentPage = 1; 
             }
             
-            // Calculate start and end index for slicing
             const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
             const endIndex = startIndex + ITEMS_PER_PAGE;
 
-            // Slice the filtered results
             const paginatedInvoices = filteredInvoices.slice(startIndex, endIndex);
 
-            // 3. Render List (using paginatedInvoices)
             historyListContainer.innerHTML = '';
 
             if (paginatedInvoices.length === 0 && historyInvoices.length > 0) {
-                 // Check if there are no results due to filter/search, but there is data overall
                 const filterActive = filterStartDate || filterEndDate || query.length > 0;
                 historyListContainer.innerHTML = `<p class="text-center text-gray-500">${filterActive ? `រកមិនឃើញលទ្ធផលសម្រាប់តម្រងដែលបានជ្រើសរើសទេ។` : 'គ្មានទិន្នន័យប្រវត្តិ។'}</p>`;
             } else if (historyInvoices.length === 0) {
-                // Case: Firestore data is genuinely empty
                 historyListContainer.innerHTML = `<p class="text-center text-gray-500">គ្មានទិន្នន័យប្រវត្តិ។</p>`;
             }
 
@@ -1573,12 +1474,11 @@
                 const invoiceDate = invoice.timestamp.toDate().toLocaleDateString('km-KH');
                 const invoiceTime = invoice.timestamp.toDate().toLocaleTimeString('km-KH', { hour: '2-digit', minute: '2-digit' });
                 const totalAmount = invoice.items.reduce((sum, item) => sum + item.total, 0) + (invoice.deliveryFee || 0);
-                const isSelected = selectedInvoiceIds.has(invoice.id); // Check selection status
+                const isSelected = selectedInvoiceIds.has(invoice.id); 
                 
-                // NEW: Determine if a print mark should be shown
-                const isPrinted = invoice.lastBulkPrinted; // It can be null or a Timestamp object
-                const printMarkIcon = isPrinted ? 
-                     `<span class="ml-2 text-green-600" title="បោះពុម្ពរួមចុងក្រោយ: ${isPrinted.toDate().toLocaleDateString('km-KH')}">
+                const isPrinted = invoice.lastBulkPrinted; 
+                const printMarkIcon = isPrinted ? 
+                    `<span class="ml-2 text-green-600" title="បោះពុម្ពរួមចុងក្រោយ: ${isPrinted.toDate().toLocaleDateString('km-KH')}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" viewBox="0 0 20 20" fill="currentColor">
                           <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 13.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                         </svg>
@@ -1618,14 +1518,14 @@
                             <p class="text-xs text-gray-500">កំណត់សម្គាល់/TxD: ${invoice.paymentNotes || 'គ្មាន'}</p>
                         </div>
                         <div class="flex gap-2">
-                            <button class="edit-invoice text-orange-600 hover:text-orange-800" data-doc-id="${invoice.id}" title="កែប្រែព័ត៌មាន">
+                            <button class="edit-invoice text-orange-600 hover:text-orange-800" data-doc-id="${invoice.id}" title="កែប្រែព័ត៌ពីអតិថិជន">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zm-3.136 9.142l-.788.788-5.61 5.61a1 1 0 01-1.414 0l-1.414-1.414a1 1 0 010-1.414l5.61-5.61.788-.788 4.243 4.243z" />
                                 </svg>
                             </button>
                             <button class="reprint-invoice text-blue-600 hover:text-blue-900" data-doc-id="${invoice.id}" title="បោះពុម្ពឡើងវិញ">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M5 4v3H4a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" />
+                                    <path d="M5 4v3H4a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm2 5V4h6v5H7zm6 3H7v4h6v-4z" />
                                 </svg>
                             </button>
                             <button class="delete-item-db text-red-600 hover:text-red-900" data-doc-id="${invoice.id}" title="លុបវិក្កយបត្រ">
@@ -1643,10 +1543,8 @@
                 historyListContainer.appendChild(cardDiv);
             });
 
-            // 4. Render Pagination Controls
             renderPaginationControls(totalItems);
 
-            // ... event listeners setup (as before)
             document.querySelectorAll('.delete-item-db').forEach(button => {
                 button.addEventListener('click', deleteItemFromDB);
             });
@@ -1657,17 +1555,13 @@
                 button.addEventListener('click', openEditModal);
             });
             
-            // NEW: Add event listeners for the checkboxes
             document.querySelectorAll('.invoice-select-checkbox').forEach(checkbox => {
-                // Ensure correct state for newly rendered boxes
                 const invoiceId = checkbox.dataset.invoiceId;
                 checkbox.checked = selectedInvoiceIds.has(invoiceId);
                 checkbox.addEventListener('change', handleCheckboxChange);
             });
-            // Update button text to reflect selection status (in case of filtering/pagination change)
             updateSelectionDisplay(); 
             
-             // Update select all button state
             const allVisibleCheckboxes = document.querySelectorAll('.invoice-select-checkbox');
             const visibleSelectedCount = Array.from(allVisibleCheckboxes).filter(cb => selectedInvoiceIds.has(cb.dataset.invoiceId)).length;
             const allSelected = allVisibleCheckboxes.length > 0 && visibleSelectedCount === allVisibleCheckboxes.length;
@@ -1679,7 +1573,6 @@
             selectAllBtn.classList.toggle('text-white', allSelected);
         };
 
-        // NEW: Function to handle bulk printing
         const printSelectedInvoices = async () => {
             if (selectedInvoiceIds.size === 0) {
                 showMessage('សូមជ្រើសរើសវិក្កយបត្រយ៉ាងតិចមួយដើម្បីបោះពុម្ព។');
@@ -1689,36 +1582,30 @@
             showConfirmation(`តើអ្នកពិតជាចង់បោះពុម្ព ${selectedInvoiceIds.size} វិក្កយបត្រមែនទេ?`, async (result) => {
                 if (result) {
                     let delay = 0;
-                    // UPDATED DELAY: Increased to 800ms for better stability against pop-up blockers
                     const printDelayMs = 800; 
                     
-                    // Filter and sort selected invoices
                     const invoicesToPrint = historyInvoices
                         .filter(inv => selectedInvoiceIds.has(inv.id))
-                        .sort((a, b) => a.timestamp.toDate() - b.timestamp.toDate()); // Print oldest first
+                        .sort((a, b) => a.timestamp.toDate() - b.timestamp.toDate()); 
 
                     let printedCount = 0;
                     for (const invoice of invoicesToPrint) {
-                        // Introduce a slight delay between opening print windows
                         await new Promise(resolve => setTimeout(resolve, delay));
                         
                         printInvoice(invoice, invoice.invoiceNumber);
                         
-                        // NEW: Update Firestore to mark the invoice as bulk printed
                         try {
                             const docRef = doc(db, `artifacts/${appId}/public/data/invoices`, invoice.id);
                             await updateDoc(docRef, {
-                                lastBulkPrinted: new Date() // Mark with current date/time
+                                lastBulkPrinted: new Date() 
                             });
                         } catch (e) {
                             console.error(`Error updating printed status for invoice ${invoice.id}:`, e);
-                            // Do not show a message to the user here, just log the error.
                         }
                         
                         delay = printDelayMs;
                         printedCount++;
 
-                        // Update UI (clear checkbox and remove from selection set)
                         const checkbox = document.querySelector(`.invoice-select-checkbox[data-invoice-id="${invoice.id}"]`);
                         if (checkbox) checkbox.checked = false;
                         selectedInvoiceIds.delete(invoice.id);
@@ -1730,40 +1617,29 @@
             });
         };
 
-        // Helper function to check if an invoice is considered 'paid' (wetted)
         const isInvoicePaid = (invoice) => {
             const paymentOption = (invoice.paymentOption || '').toLowerCase();
-            
-            // The payment methods that count as paid/wetted (ABA, AC, Wing, True Emoney, Other Bank)
-            // Anything NOT "តាមអ្នកដឹក" AND NOT "មិនបានជ្រើសរើស" is considered paid/wetted 
-            // based on the current form's mutually exclusive nature.
-            
-            // Note: Since custom payment methods (ធនាគារផ្សេង) are complex strings, checking for exclusion is safest.
-            const isUnpaid = paymentOption.includes('តាមអ្នកដឹក') || paymentOption.includes('មិនបានជ្រើសរើស');
+            const isUnpaid = paymentOption.includes('តាមអ្នកដឹក') || paymentOption.includes('មិនទាន់វេទឹកប្រាក់');
             return !isUnpaid; 
         };
 
 
-        // Function to update all dashboard metrics
         const updateDashboard = () => {
-            let totalSalesCount = 0; // This will now count invoices/transactions
+            let totalSalesCount = 0; 
             let totalRevenue = 0;
             let totalDeliveryFee = 0;
             
             const startDate = startDateInput.value ? new Date(startDateInput.value) : null;
             const endDate = endDateInput.value ? new Date(endDateInput.value) : null;
 
-            // NEW Filter values
             const selectedDeliveryOption = dashboardDeliveryFilter.value;
             const selectedPaymentStatus = dashboardPaymentStatusFilter.value;
 
             const filteredInvoices = historyInvoices.filter(invoice => {
                 const invoiceDate = invoice.timestamp.toDate();
                 
-                // 1. Date Filtering
                 let matchesDate = true;
                 if (startDate) {
-                     // Set time to start of day for comparison
                     const startOfDay = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0);
                     if (invoiceDate < startOfDay) {
                         matchesDate = false;
@@ -1778,7 +1654,6 @@
                 if (!matchesDate) return false;
 
 
-                // 2. Delivery Filter Logic
                 if (selectedDeliveryOption !== 'All') {
                     const invoiceDelivery = invoice.deliveryOption || 'មិនបានជ្រើសរើស';
                     if (invoiceDelivery !== selectedDeliveryOption) {
@@ -1786,7 +1661,6 @@
                     }
                 }
 
-                // 3. Payment Status Filter Logic
                 if (selectedPaymentStatus === 'Paid') {
                     if (!isInvoicePaid(invoice)) return false;
                 } else if (selectedPaymentStatus === 'Unpaid') {
@@ -1796,12 +1670,10 @@
                 return true;
             });
 
-            // Set total sales count to the number of filtered invoices
             totalSalesCount = filteredInvoices.length;
 
             filteredInvoices.forEach(invoice => {
                 invoice.items.forEach(item => {
-                    // Accumulate total revenue from item sales
                     totalRevenue += item.total;
                 });
                 totalDeliveryFee += invoice.deliveryFee;
@@ -1812,131 +1684,14 @@
             totalDeliveryFeeDisplay.textContent = `$${totalDeliveryFee.toFixed(2)}`;
         };
         
-        // Helper functions for getting checkbox values
-        const getStoreName = () => {
-            if (ccrOnlineCheckbox.checked) return 'CCR Online Store';
-            if (yl99CcrCheckbox.checked) return 'YL 99CCR';
-            if (ccr168Checkbox.checked) return 'CCR168';
-            return 'វិក្កយបត្រ';
-        };
-
-        const getDeliveryOptions = () => {
-            if (vetRadio.checked) return 'VET';
-            if (jtRadio.checked) return 'J&T';
-            if (phnompenhRadio.checked) return 'ភ្នំពេញ';
-            return 'មិនបានជ្រើសរើស';
-        };
-
-        const getPaymentOptions = () => {
-            let options = [];
-            if (acCheckbox.checked) options.push('AC');
-            if (abaCheckbox.checked) options.push('ABA');
-            if (wingCheckbox.checked) options.push('Wing');
-            if (trueEmoneyCheckbox) options.push('True Emoney');
-            if (byDelivererCheckbox.checked) options.push('តាមអ្នកដឹក');
-            
-            // NEW LOGIC: Include custom payment if available
-            // Check if otherBankCheckbox is checked and the input field (which is visible only then) has a value
-            if (otherBankCheckbox.checked) {
-                const customPayment = otherPaymentMethodInput.value.trim();
-                options.push(customPayment || 'ធនាគារផ្សេង'); 
-            }
-            
-            return options.join(', ') || 'មិនបានជ្រើសរើស';
-        };
-
-        // Function to clear input forms
-        const clearFormInputs = () => {
-            customerNameInput.value = '';
-            customerPhoneInput.value = '';
-            customerAddressInput.value = '';
-            vetRadio.checked = false;
-            jtRadio.checked = false;
-            phnompenhRadio.checked = false;
-            ccrOnlineCheckbox.checked = false;
-            yl99CcrCheckbox.checked = false;
-            ccr168Checkbox.checked = false;
-            acCheckbox.checked = false;
-            abaCheckbox.checked = false;
-            wingCheckbox.checked = false;
-            trueEmoneyCheckbox.checked = false;
-            byDelivererCheckbox.checked = false;
-            otherBankCheckbox.checked = false; 
-            otherPaymentMethodInput.value = ''; 
-            toggleOtherPaymentInput(); // Hide the custom payment input
-            paymentNotesInput.value = '';
-            deliveryFeeInput.value = '';
-            itemNameInput.value = '';
-            itemQuantityInput.value = '1';
-            itemPriceInput.value = '';
-            itemNameInput.focus();
-        };
-
-        /**
-         * Handles the entire process of saving the invoice transaction, including validation and TxD conflict checks.
-         * @param {boolean} shouldPrint - True if the invoice should be printed after saving.
-         */
-        const handleSaveAction = async (shouldPrint) => {
-            if (currentInvoiceItems.length === 0) {
-                showMessage('សូមបន្ថែមទំនិញយ៉ាងតិចមួយមុខដើម្បីរក្សាទុក ឬបោះពុម្ព។');
-                return;
-            }
-            
-            // Clean the phone number before validation/saving
-            const customerPhoneClean = cleanPhoneNumber(customerPhoneInput.value);
-            const customerName = customerNameInput.value.trim();
-            const customerAddress = customerAddressInput.value.trim();
-            const paymentNotes = paymentNotesInput.value.trim();
-            const deliveryFee = parseFloat(deliveryFeeInput.value) || 0;
-            const storeName = getStoreName();
-            const deliveryOption = getDeliveryOptions();
-            const paymentOption = getPaymentOptions();
-            
-            if (!customerName || customerPhoneClean.length < 7 || !customerAddress || storeName === 'វិក្កយបត្រ') {
-                showMessage('សូមបំពេញឈ្មោះអតិថិជន លេខទូរស័ព្ទ (យ៉ាងតិច 7 ខ្ទង់) អាសយដ្ឋាន និងជ្រើសរើសហាង។');
-                return;
-            }
-            
-            // --- TxD/Payment Notes Conflict Check ---
-            if (paymentNotes.length > 0) {
-                 const conflictingInvoice = historyInvoices.find(invoice => 
-                     (invoice.paymentNotes || '').trim().toLowerCase() === paymentNotes.toLowerCase()
-                 );
-
-                 if (conflictingInvoice) {
-                     // If conflict found, show rich message and prompt for confirmation
-                     showConfirmationTxDConflict('កំណត់សម្គាល់នេះត្រូវបានប្រើប្រាស់រួចហើយនៅក្នុងប្រព័ន្ធ។ សូមកែតម្រូវ ឬបន្តប្រសិនបើអ្នកប្រាកដ។', conflictingInvoice, (confirmContinue) => {
-                         if (confirmContinue) {
-                             // User confirmed to proceed despite conflict
-                             saveInvoiceTransaction({
-                                customerName, customerPhone: customerPhoneInput.value.trim(), customerAddress, deliveryOption, paymentOption, paymentNotes, deliveryFee, storeName
-                             }, shouldPrint);
-                         }
-                         // If user says no, the process stops.
-                     });
-                     return; // Stop the immediate save process
-                 }
-            }
-            // If no conflict, proceed directly
-            saveInvoiceTransaction({
-               customerName, customerPhone: customerPhoneInput.value.trim(), customerAddress, deliveryOption, paymentOption, paymentNotes, deliveryFee, storeName
-            }, shouldPrint);
-        };
-
-        /**
-         * Core function to save the invoice to Firestore and optionally print it.
-         * @param {object} invoiceDetails - The customer/transaction details.
-         * @param {boolean} shouldPrint - If true, triggers the print dialog.
-         */
         const saveInvoiceTransaction = async (invoiceDetails, shouldPrint) => {
             const { customerName, customerPhone, customerAddress, deliveryOption, paymentOption, paymentNotes, deliveryFee, storeName } = invoiceDetails;
             try {
-                 // Generate the sequential invoice number (based on current total count + 1)
                 const newInvoiceNumber = 'C' + (historyInvoices.length + 1).toString().padStart(7, '0');
 
                 const invoiceData = {
                     customerName,
-                    customerPhone, // Save the phone number as displayed (with spaces for history lookup consistency, though clean number is used for search later)
+                    customerPhone, 
                     customerAddress,
                     deliveryOption,
                     paymentOption,
@@ -1946,10 +1701,8 @@
                     items: currentInvoiceItems,
                     timestamp: new Date(),
                     invoiceNumber: newInvoiceNumber,
-                    // Do not set lastBulkPrinted on individual print/save operation, as this flag is for bulk marking.
                 };
                 
-                // Save the entire invoice as a single document
                 await addDoc(collection(db, `artifacts/${appId}/public/data/invoices`), invoiceData);
                 
                 if (shouldPrint) {
@@ -1959,7 +1712,6 @@
                     showMessage('ទិន្នន័យត្រូវបានរក្សាទុកដោយជោគជ័យ។');
                 }
 
-                // Clear the local array and form inputs after successful save (transaction complete)
                 currentInvoiceItems = [];
                 renderSalesList();
                 clearFormInputs();
@@ -1969,8 +1721,7 @@
                 showMessage('មានបញ្ហាក្នុងការរក្សាទុកវិក្្កយបត្រ។');
             }
         }
-
-        // Payment Notes/TxD conflict check function with confirmation callback
+        
         const showConfirmationTxDConflict = (title, invoice, callback) => {
             const itemsHtml = invoice.items.map(item => 
                 `<li class="ml-4 list-disc">${item.name} (${item.quantity} x $${item.price.toFixed(2)})</li>`
@@ -2002,54 +1753,61 @@
             confirmMessage.textContent = title.split('. ')[0] + '. តើអ្នកចង់បន្តការរក្សាទុកទេ?';
             confirmModal.style.display = 'flex';
             
-            // Temporarily replace modal message content with rich content
             const originalModalContent = modalMessage.textContent;
             modalMessage.textContent = 'សូមពិនិត្យមើលឡើងវិញ!';
             modalRichContent.innerHTML = htmlContent;
-            messageModal.style.display = 'flex'; // Show both modals temporarily
+            messageModal.style.display = 'flex'; 
 
-            // Override confirmation callback to handle rich content closing
             confirmationCallback = (result) => {
-                messageModal.style.display = 'none'; // Close rich content modal
+                messageModal.style.display = 'none'; 
                 confirmModal.style.display = 'none';
-                modalMessage.textContent = originalModalContent; // Restore simple message header
-                modalRichContent.innerHTML = ''; // Clear rich content
+                modalMessage.textContent = originalModalContent; 
+                modalRichContent.innerHTML = ''; 
                 callback(result);
             };
         };
         
-        // Add event listener for paymentNotesInput (Client-side visual warning)
-        paymentNotesInput.addEventListener('input', () => {
-            const txd = paymentNotesInput.value.trim();
-            // Only perform check if it's long enough to be a meaningful ID
-            if (txd.length > 5) { 
-                const conflictingInvoice = historyInvoices.find(invoice => 
-                    (invoice.paymentNotes || '').trim().toLowerCase() === txd.toLowerCase()
-                );
-
-                if (conflictingInvoice) {
-                    showRichMessage('លេខសម្គាល់TxD/កំណត់សម្គាល់នេះមានរួចហើយនៅក្នុងប្រព័ន្ធ!', `
-                        <p class="text-red-600 font-bold mb-3">ការព្រមាន៖ កំណត់សម្គាល់នេះត្រូវបានប្រើប្រាស់រួចហើយ។</p>
-                        <div class="bg-red-50 p-3 rounded-md border border-red-200 space-y-1 text-gray-800">
-                           <p><strong>លេខវិក្្កយបត្រ៖</strong> ${conflictingInvoice.invoiceNumber || 'N/A'}</p>
-                           <p><strong>ឈ្មោះអតិថិជន៖</strong> ${conflictingInvoice.customerName || 'N/A'}</p>
-                           <p><strong>កាលបរិច្ឆេទបញ្ជាទិញ៖</strong> ${conflictingInvoice.timestamp.toDate().toLocaleDateString('km-KH')}</p>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-700">សូមបន្តការបញ្ចូលទិន្នន័យ។ ការត្រួតពិនិត្យចុងក្រោយនឹងធ្វើឡើងនៅពេលបោះពុម្ព។</p>
-                    `);
-                } else if (messageModal.style.display === 'flex' && modalRichContent.innerHTML !== '') {
-                    // If modal is currently showing a rich conflict message, clear it if the input is now resolved
-                    messageModal.style.display = 'none';
-                }
-            } else if (messageModal.style.display === 'flex' && modalRichContent.innerHTML !== '') {
-                 // Clear the conflict message if the input is cleared or too short
-                 messageModal.style.display = 'none';
+        const handleSaveAction = async (shouldPrint) => {
+            if (currentInvoiceItems.length === 0) {
+                showMessage('សូមបន្ថែមទំនិញយ៉ាងតិចមួយមុខដើម្បីរក្សាទុក ឬបោះពុម្ព។');
+                return;
             }
-        });
-        
-        /**
-         * Fetches an invoice by its ID and triggers the print function.
-         */
+            
+            const customerPhoneClean = cleanPhoneNumber(customerPhoneInput.value);
+            const customerName = customerNameInput.value.trim();
+            const customerAddress = customerAddressInput.value.trim();
+            const paymentNotes = paymentNotesInput.value.trim();
+            const deliveryFee = parseFloat(deliveryFeeInput.value) || 0;
+            const storeName = getStoreName();
+            const deliveryOption = getDeliveryOptions();
+            const paymentOption = getPaymentOptions();
+            
+            if (!customerName || customerPhoneClean.length < 7 || !customerAddress || storeName === 'វិក្កយបត្រ') {
+                showMessage('សូមបំពេញឈ្មោះអតិថិជន លេខទូរស័ព្ទ (យ៉ាងតិច 7 ខ្ទង់) អាសយដ្ឋាន និងជ្រើសរើសហាង។');
+                return;
+            }
+            
+            if (paymentNotes.length > 0) {
+                 const conflictingInvoice = historyInvoices.find(invoice => 
+                     (invoice.paymentNotes || '').trim().toLowerCase() === paymentNotes.toLowerCase()
+                   );
+
+                 if (conflictingInvoice) {
+                     showConfirmationTxDConflict('កំណត់សម្គាល់នេះត្រូវបានប្រើប្រាស់រួចហើយនៅក្នុងប្រព័ន្ធ។ សូមកែតម្រូវ ឬបន្តប្រសិនបើអ្នកប្រាកដ។', conflictingInvoice, (confirmContinue) => {
+                         if (confirmContinue) {
+                             saveInvoiceTransaction({
+                                 customerName, customerPhone: customerPhoneInput.value.trim(), customerAddress, deliveryOption, paymentOption, paymentNotes, deliveryFee, storeName
+                             }, shouldPrint);
+                         }
+                     });
+                     return; 
+                 }
+            }
+            saveInvoiceTransaction({
+               customerName, customerPhone: customerPhoneInput.value.trim(), customerAddress, deliveryOption, paymentOption, paymentNotes, deliveryFee, storeName
+            }, shouldPrint);
+        };
+
         const reprintInvoice = async (event) => {
             const docId = event.currentTarget.dataset.docId;
             const invoice = historyInvoices.find(inv => inv.id === docId);
@@ -2061,9 +1819,6 @@
             }
         };
 
-        /**
-         * Renders the invoice data into a new print window (for thermal printer style).
-         */
         const printInvoice = (invoiceData, invoiceNumber) => {
             
             const now = new Date();
@@ -2074,7 +1829,7 @@
             const customerPhone = invoiceData.customerPhone || "មិនមានលេខទូរស័ព្ទ";
             const customerAddress = invoiceData.customerAddress || "មិនមានអាសយដ្ឋាន";
             const deliveryOption = invoiceData.deliveryOption || "មិនបានជ្រើសរើស";
-            const paymentOption = invoiceData.paymentOption || "មិនបានជ្រើសរើស";
+            const paymentOption = invoiceData.paymentOption || "មិនទាន់វេទឹកប្រាក់"; 
             const paymentNotes = invoiceData.paymentNotes || "គ្មាន";
             const storeName = invoiceData.storeName;
             const salesTotal = invoiceData.items.reduce((sum, item) => sum + item.total, 0);
@@ -2084,7 +1839,6 @@
             let delivererAmountDisplay = '';
 
 
-            // Create the invoice content HTML
             let invoiceHTML = `
                 <div class="invoice-print-section" style="width: 80mm; margin: 0 auto; padding: 5mm; box-sizing: border-box; font-family: 'Khmer OS Battambang', 'Khmer OS', sans-serif;">
                     <h1 style="font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 5mm;">${storeName}</h1>
@@ -2141,12 +1895,10 @@
                 </div>
             `;
 
-            // Open a new window and write the invoice HTML
             const printWindow = window.open('', '_blank', 'height=600,width=800');
             printWindow.document.write('<html><head><title>វិក្្កយបត្រ</title>');
             printWindow.document.write('<style>');
             printWindow.document.write('@page { size: 80mm auto; margin: 0; }');
-            // UPDATED: Set Khmer OS Battambang as the primary font for the print body
             printWindow.document.write('body{font-family: "Khmer OS Battambang", Arial, sans-serif; font-size: 14px;} table{width: 100%; border-collapse: collapse;} th, td{padding: 2px 0; text-align: left;}');
             printWindow.document.write('</style>');
             printWindow.document.write('</head><body>');
@@ -2155,15 +1907,10 @@
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();
-            
-            // Clear input forms after printing
-            // Note: This is already handled by saveInvoiceTransaction, so we remove the redundant call here.
         };
 
-        // Function to download data as CSV
         const downloadDataAsCsv = async () => {
             try {
-                // Apply date filters to the data being downloaded
                 const filterStartDate = historyStartDateInput.value ? new Date(historyStartDateInput.value) : null;
                 const filterEndDate = historyEndDateInput.value ? new Date(historyEndDateInput.value) : null;
 
@@ -2190,20 +1937,14 @@
                     return;
                 }
 
-                // Create CSV string
-                // Removed "ចំនួនអ្នកដឹកប្រមូល" from headers
                 const headers = ["លេខវិក្្កយបត្រ", "ឈ្មោះអតិថិជន", "លេខទូរស័ព្ទ", "អាសយដ្ឋាន", "ឈ្មោះហាង", "ឈ្មោះទំនិញ", "ចំនួន", "តម្លៃ", "ផលបូក", "ជម្រើសដឹកជញ្ជូន", "ជម្រើសការទូទាត់", "កំណត់សម្គាល់", "សេវាដឹក", "កាលបរិច្ឆេទ"]; 
-                // Add BOM for proper Khmer/UTF-8 display in Excel
                 let csv = "\uFEFF" + headers.join(',') + '\n';
                 
-                // Sort by date ascending for easier spreadsheet processing
                 const sortedInvoices = [...filteredInvoices].sort((a, b) => a.timestamp.toDate() - b.timestamp.toDate());
                 
                 sortedInvoices.forEach((invoice) => {
-                    // Note: Use the stored invoiceNumber, not the index, but fallback is okay.
                     const invoiceNumber = invoice.invoiceNumber || 'N/A';
                     invoice.items.forEach(item => {
-                        // Function to sanitize string for CSV (handle quotes and commas)
                         const sanitize = (str) => `"${(str || '').toString().replace(/"/g, '""')}"`;
 
                         const values = [
@@ -2226,7 +1967,6 @@
                     });
                 });
 
-                // Trigger download
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement("a");
                 const url = URL.createObjectURL(blob);
@@ -2245,30 +1985,27 @@
             }
         };
 
-        // Function to toggle between different views
         const toggleView = (viewToShow) => {
             dashboardView.style.display = 'none';
             customerInfoView.style.display = 'none';
             addItemView.style.display = 'none';
             historyView.style.display = 'none';
 
-            // Reset active button styles
+            // Reset inactive button styles (now using indigo-100/indigo-600)
             [dashboardNavBtn, customerInfoNavBtn, addItemNavBtn, historyNavBtn].forEach(btn => {
-                btn.classList.remove('bg-white');
-                btn.classList.add('text-gray-700');
+                btn.classList.remove('bg-indigo-900', 'bg-white');
+                btn.classList.add('text-indigo-100', 'hover:bg-indigo-600');
             });
             
-            // Set styles for dark mode icons
-            const isDarkMode = document.body.classList.contains('dark-mode');
+            // Set active button style (now using bg-indigo-900 text-white)
             const setActiveStyle = (btn) => {
-                btn.classList.add('bg-white');
-                btn.classList.remove('text-gray-700');
+                btn.classList.add('bg-indigo-900', 'text-white', 'hover:bg-indigo-800');
+                btn.classList.remove('text-indigo-100', 'hover:bg-indigo-600');
             };
 
             if (viewToShow === 'dashboard') {
                 dashboardView.style.display = 'block';
                 setActiveStyle(dashboardNavBtn);
-                // Ensure dashboard is updated when viewed
                 updateDashboard();
             } else if (viewToShow === 'customerInfo') {
                 customerInfoView.style.display = 'block';
@@ -2279,24 +2016,228 @@
             } else if (viewToShow === 'history') {
                 historyView.style.display = 'block';
                 setActiveStyle(historyNavBtn);
-                // Re-render list when navigating to history
                 renderHistoryList(); 
             }
         };
 
-        // Initial check for custom payment input visibility
-        toggleOtherPaymentInput();
+
+        /**
+         * Loads public data (invoices and products) from Firestore using real-time listeners.
+         */
+        async function loadPublicData() {
+            loadingView.style.display = 'flex';
+            mainApp.style.display = 'none';
+            
+            try {
+                if (unsubscribeInvoices) {
+                    unsubscribeInvoices();
+                }
+                if (unsubscribeProducts) {
+                    unsubscribeProducts();
+                }
+
+                // Collection paths for public data
+                const invoicesCollectionRef = collection(db, `artifacts/${appId}/public/data/invoices`);
+                const productsCollectionRef = collection(db, `artifacts/${appId}/public/data/products`);
+
+                // Real-time listener for invoices (History)
+                unsubscribeInvoices = onSnapshot(invoicesCollectionRef, (querySnapshot) => {
+                    historyInvoices = [];
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        historyInvoices.push({
+                            id: doc.id,
+                            // Ensure timestamp fields are handled correctly
+                            timestamp: data.timestamp || new Date(), 
+                            lastBulkPrinted: data.lastBulkPrinted || null, // NEW FIELD
+                            ...data
+                        });
+                    });
+                    // Ensure the newest invoices are first for easy access
+                    historyInvoices.sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate());
+                    
+                    populateProductDatalist();
+                    renderHistoryList();
+                    updateDashboard();
+                });
+
+                // Real-time listener for products (Add Item page list and datalist source)
+                unsubscribeProducts = onSnapshot(productsCollectionRef, (querySnapshot) => {
+                    products = [];
+                    querySnapshot.forEach((doc) => {
+                        products.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    renderProductsList();
+                    populateProductDatalist();
+                });
+                
+                loadingView.style.display = 'none';
+                mainApp.style.display = 'flex';
+                
+            } catch (error) {
+                console.error("Firestore error:", error);
+                loadingView.style.display = 'none';
+                mainApp.style.display = 'flex';
+                showMessage('មានបញ្ហាក្នុងការផ្ទុកទិន្នន័យ។ សូមព្យាយាមម្ដងទៀត។');
+            }
+        }
+        
+        // --- AUTH INITIALIZATION ---
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            
+            // Function to handle authentication, preferring custom token but falling back to anonymous
+            const initialAuth = async () => {
+                try {
+                    const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                    if (token) {
+                        // Attempt to sign in with the custom token provided by the environment
+                        await signInWithCustomToken(auth, token);
+                    } else {
+                        // Fallback to anonymous sign-in if no token is available
+                        await signInAnonymously(auth);
+                    }
+                } catch (authError) {
+                    console.warn("Custom token sign-in failed. Falling back to anonymous sign-in.", authError);
+                    // Handle custom-token-mismatch error by retrying with anonymous sign-in
+                    await signInAnonymously(auth);
+                }
+
+                // After a successful sign-in (either way), get the current user.
+                const user = auth.currentUser;
+                if (user) {
+                    userId = user.uid;
+                    isAuthReady = true;
+                    console.log("Authenticated as user:", userId);
+                    loadPublicData();
+                } else {
+                    console.error("Authentication failed. No user object available.");
+                    loadingView.style.display = 'none';
+                    mainApp.style.display = 'flex';
+                    showMessage('ការផ្ទៀងផ្ទាត់បរាជ័យ។ សូមពិនិត្យមើលការកំណត់រចនាសម្ព័ន្ធ Firebase របស់អ្នក។');
+                }
+            };
+            initialAuth();
+        } catch (error) {
+            console.error("Firebase Initialization Error:", error);
+            document.getElementById('loadingView').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'flex';
+            document.getElementById('contentArea').innerHTML = `
+                <div class="max-w-xl mx-auto bg-white rounded-xl shadow-lg p-8 text-center text-red-600">
+                    <p class="text-xl font-bold mb-4">មានបញ្ហាក្នុងការភ្ជាប់ Firebase!</p>
+                    <p>សូមបើកកូដរបស់អ្នក ហើយបន្លែមព័ត៌មាន <span class="font-mono">firebaseConfig</span> របស់គម្រោងអ្នក។</p>
+                </div>
+            `;
+        }
 
 
-        // Add event listeners to buttons
+        // --- EVENT LISTENERS ---
+
+        if(modalOkBtn) {
+            modalOkBtn.addEventListener('click', () => {
+                messageModal.style.display = 'none';
+            });
+        }
+
+        if(confirmYesBtn) {
+            confirmYesBtn.addEventListener('click', () => {
+                confirmModal.style.display = 'none';
+                if (confirmationCallback) {
+                    confirmationCallback(true);
+                }
+            });
+        }
+        if(confirmNoBtn) {
+            confirmNoBtn.addEventListener('click', () => {
+                confirmModal.style.display = 'none';
+                if (confirmationCallback) {
+                    confirmationCallback(false);
+                }
+            });
+        }
+        
+        // Event listeners for Edit Modal
+        if (editSaveBtn) editSaveBtn.addEventListener('click', saveEditedInvoice);
+        if (editCancelBtn) editCancelBtn.addEventListener('click', () => { 
+            editModal.style.display = 'none'; 
+        });
+
+        if (ccrOnlineCheckbox) ccrOnlineCheckbox.addEventListener('change', () => handleStoreSelection(ccrOnlineCheckbox));
+        if (yl99CcrCheckbox) yl99CcrCheckbox.addEventListener('change', () => handleStoreSelection(yl99CcrCheckbox));
+        if (ccr168Checkbox) ccr168Checkbox.addEventListener('change', () => handleStoreSelection(ccr168Checkbox));
+        
+        if (acCheckbox) acCheckbox.addEventListener('change', () => handlePaymentSelection(acCheckbox));
+        if (abaCheckbox) abaCheckbox.addEventListener('change', () => handlePaymentSelection(abaCheckbox));
+        if (wingCheckbox) wingCheckbox.addEventListener('change', () => handlePaymentSelection(wingCheckbox));
+        if (trueEmoneyCheckbox) trueEmoneyCheckbox.addEventListener('change', () => handlePaymentSelection(trueEmoneyCheckbox));
+        if (byDelivererCheckbox) byDelivererCheckbox.addEventListener('change', () => handlePaymentSelection(byDelivererCheckbox));
+        
+        if (otherBankCheckbox) otherBankCheckbox.addEventListener('change', () => {
+             handlePaymentSelection(otherBankCheckbox); 
+             toggleOtherPaymentInput();
+        }); 
+
+        
+        let debounceTimer;
+        customerPhoneInput.addEventListener('input', (e) => {
+            formatPhoneNumber(e.target);
+            
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const finalCleanPhone = cleanPhoneNumber(e.target.value);
+                if (finalCleanPhone.length >= 7) { 
+                    const latestInvoice = historyInvoices
+                        .filter(invoice => cleanPhoneNumber(invoice.customerPhone) === finalCleanPhone)
+                        .sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate())[0];
+                    
+                    if (latestInvoice) {
+                        showConfirmation("អតិថិជនចាស់ តើអ្នកចង់អោយកម្មវិធីបំពេញជំនួសទេ", (result) => {
+                            if (result) {
+                                fillCustomerData(latestInvoice);
+                            }
+                        });
+                    }
+                }
+            }, 500);
+        });
+
+        paymentNotesInput.addEventListener('input', () => {
+            const txd = paymentNotesInput.value.trim();
+            if (txd.length > 5) { 
+                const conflictingInvoice = historyInvoices.find(invoice => 
+                    (invoice.paymentNotes || '').trim().toLowerCase() === txd.toLowerCase()
+                );
+
+                if (conflictingInvoice) {
+                    showRichMessage('លេខសម្គាល់TxD/កំណត់សម្គាល់នេះមានរួចហើយនៅក្នុងប្រព័ន្ធ!', `
+                        <p class="text-red-600 font-bold mb-3">ការព្រមាន៖ កំណត់សម្គាល់នេះត្រូវបានប្រើប្រាស់រួចហើយ។</p>
+                        <div class="bg-red-50 p-3 rounded-md border border-red-200 space-y-1 text-gray-800">
+                           <p><strong>លេខវិក្្កយបត្រ៖</strong> ${conflictingInvoice.invoiceNumber || 'N/A'}</p>
+                           <p><strong>ឈ្មោះអតិថិជន៖</strong> ${conflictingInvoice.customerName || 'N/A'}</p>
+                           <p><strong>កាលបរិច្ឆេទបញ្ជាទិញ៖</strong> ${conflictingInvoice.timestamp.toDate().toLocaleDateString('km-KH')}</p>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-700">សូមបន្តការបញ្ចូលទិន្នន័យ។ ការត្រួតពិនិត្យចុងក្រោយនឹងធ្វើឡើងនៅពេលបោះពុម្ព។</p>
+                    `);
+                } else if (messageModal.style.display === 'flex' && modalRichContent.innerHTML !== '') {
+                    messageModal.style.display = 'none';
+                }
+            } else if (messageModal.style.display === 'flex' && modalRichContent.innerHTML !== '') {
+                 messageModal.style.display = 'none';
+            }
+        });
+        
         if (addItemBtn) addItemBtn.addEventListener('click', addItem);
         if (clearFormBtn) clearFormBtn.addEventListener('click', clearFormInputs);
         
-        // Use the new handleSaveAction function
         if (printBtn) {
             printBtn.addEventListener('click', () => handleSaveAction(true));
         }
-        if (saveOnlyBtn) { // NEW LISTENER FOR SAVE BUTTON
+        if (saveOnlyBtn) { 
             saveOnlyBtn.addEventListener('click', () => handleSaveAction(false));
         }
         
@@ -2306,7 +2247,7 @@
                     if (result) {
                         currentInvoiceItems = [];
                         renderSalesList();
-                        clearFormInputs(); // Clear customer fields too
+                        clearFormInputs(); 
                         showMessage('បានលុបបញ្ជីបច្ចុប្បន្នដោយជោគជ័យ។');
                     }
                 });
@@ -2317,12 +2258,10 @@
             downloadDataBtn.addEventListener('click', downloadDataAsCsv);
         }
 
-        // NEW: Bulk print button listener
         if (printSelectedBtn) {
             printSelectedBtn.addEventListener('click', printSelectedInvoices);
         }
 
-        // NEW: Select All button listener
         if (selectAllBtn) {
             selectAllBtn.addEventListener('click', selectAllInvoices);
         }
@@ -2331,23 +2270,18 @@
             addNewProductBtn.addEventListener('click', addNewProduct);
         }
         
-        // Navigation button listeners
         if (dashboardNavBtn) dashboardNavBtn.addEventListener('click', () => toggleView('dashboard'));
         if (customerInfoNavBtn) customerInfoNavBtn.addEventListener('click', () => toggleView('customerInfo'));
         if (addItemNavBtn) addItemNavBtn.addEventListener('click', () => toggleView('addItem'));
         if (historyNavBtn) historyNavBtn.addEventListener('click', () => toggleView('history'));
 
-        // Dashboard filter listeners
         if (startDateInput) startDateInput.addEventListener('change', updateDashboard);
         if (endDateInput) endDateInput.addEventListener('change', updateDashboard);
         
-        // NEW Dashboard filter listeners
         if (dashboardDeliveryFilter) dashboardDeliveryFilter.addEventListener('change', updateDashboard);
         if (dashboardPaymentStatusFilter) dashboardPaymentStatusFilter.addEventListener('change', updateDashboard);
         
-        // History filter listeners
         const filterListeners = () => {
-            // Reset page number on any filter/search change
             currentPage = 1;
             renderHistoryList();
         };
@@ -2357,49 +2291,29 @@
         if (searchQueryInput) searchQueryInput.addEventListener('input', filterListeners);
 
 
-        // Allow pressing Enter to add an item
         document.addEventListener('keypress', (e) => {
-            // Check if the current focused element is an input within the item entry section
             const isItemInput = ['itemName', 'itemQuantity', 'itemPrice'].includes(e.target.id);
             const isSubmitButton = e.target.id === 'addItemBtn';
 
             if (e.key === 'Enter' && (isItemInput || isSubmitButton)) {
-                // Prevent default form submission if any
                 e.preventDefault(); 
                 addItem();
             }
         });
 
-        // Event listener for input on the itemName field to auto-populate the price
         itemNameInput.addEventListener('input', () => {
             const selectedItemName = itemNameInput.value.trim();
-            // Check against products list first (which is the manually managed list)
             let product = products.find(p => p.name === selectedItemName);
             
-            // Fallback: If not found in managed products, try to find it in previous invoice history items
-            if (!product) {
-                // The user requested to remove this fallback check:
-                /*
-                for (const invoice of historyInvoices) {
-                    product = invoice.items.find(item => item.name === selectedItemName);
-                    if (product) break;
-                }
-                */
-            }
-            
             if (product) {
-                // Use the price from the found product/item
                 itemPriceInput.value = (product.price || 0).toFixed(2);
             } else if (itemPriceInput.value === '' || parseFloat(itemPriceInput.value) === 0) {
-                 // Clear price if item name doesn't match a product, only if price is currently empty or zero
                  itemPriceInput.value = '';
             }
         });
         
-        // Add event listener to recalculate total on delivery fee change
         if (deliveryFeeInput) deliveryFeeInput.addEventListener('input', renderSalesList);
 
-        // Dark/Light Theme Toggle
         if (themeToggleBtn) {
             themeToggleBtn.addEventListener('click', () => {
                 const body = document.body;
@@ -2416,7 +2330,8 @@
             });
         }
 
-        // Initial view load
+        // Initial check for custom payment input visibility and view load
+        toggleOtherPaymentInput();
         toggleView('dashboard');
     </script>
 </body>
