@@ -224,13 +224,26 @@
                     <input type="number" id="editDeliveryFee" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
                 </div>
 
-                <!-- NEW: Payment Option -->
+                <!-- UPDATED: Payment Option Select (Drop-down list) -->
                 <div class="pt-2">
-                    <label for="editPaymentOption" class="block text-sm font-medium text-gray-700">ជម្រើសការទូទាត់ (កំណត់សម្គាល់ធនាគារ)</label>
-                    <input type="text" id="editPaymentOption" placeholder="ឧទា: ABA, Wing, True Emoney, តាមអ្នកដឹក" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                    <label for="editPaymentOptionSelect" class="block text-sm font-medium text-gray-700">ជម្រើសការទូទាត់</label>
+                    <select id="editPaymentOptionSelect" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                        <option value="AC">AC</option>
+                        <option value="ABA">ABA</option>
+                        <option value="Wing">Wing</option>
+                        <option value="True Emoney">True Emoney</option>
+                        <option value="តាមអ្នកដឹក">តាមអ្នកដឹក</option>
+                        <option value="ធនាគារផ្សេង">ធនាគារផ្សេង (Custom)</option>
+                        <option value="មិនទាន់វេទឹកប្រាក់">មិនទាន់វេទឹកប្រាក់ (Unpaid)</option>
+                    </select>
                 </div>
-                
-                <!-- NEW: Payment Notes / TxD -->
+                <!-- NEW: Custom Payment Input (visible if "ធនាគារផ្សេង" selected) -->
+                <div class="pt-2 hidden" id="editOtherPaymentContainer">
+                    <label for="editOtherPaymentInput" class="block text-sm font-medium text-gray-700">ឈ្មោះធនាគារ/ការទូទាត់ផ្សេងទៀត</label>
+                    <input type="text" id="editOtherPaymentInput" placeholder="ឧទា: ធនាគារ Wing Bank, វីង, ផ្សេងៗ..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+
+                <!-- RETAINED: Payment Notes / TxD -->
                 <div class="pt-2">
                     <label for="editPaymentNotes" class="block text-sm font-medium text-gray-700">កំណត់សម្គាល់បន្ថែម (លេខ TxD)</label>
                     <input type="text" id="editPaymentNotes" placeholder="លេខ TxD" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
@@ -737,7 +750,10 @@
         const editCancelBtn = document.getElementById('editCancelBtn');
         // NEW Edit modal elements
         const editStoreNameSelect = document.getElementById('editStoreName');
-        const editPaymentOptionInput = document.getElementById('editPaymentOption');
+        // const editPaymentOptionInput = document.getElementById('editPaymentOption'); // REMOVED
+        const editPaymentOptionSelect = document.getElementById('editPaymentOptionSelect'); // NEW SELECT
+        const editOtherPaymentContainer = document.getElementById('editOtherPaymentContainer'); // NEW CONTAINER
+        const editOtherPaymentInput = document.getElementById('editOtherPaymentInput'); // NEW INPUT
         const editPaymentNotesInput = document.getElementById('editPaymentNotes');
 
 
@@ -847,7 +863,7 @@
 
         /**
          * Formats the phone number input to the Cambodian standard (max 10 digits, 0-prefix, XXX XXX XXXX spacing).
-         * Ensures cursor position is maintained during input.
+         * Ensures cursor position is maintained during input, particularly when '0' is implicitly added.
          * @param {HTMLInputElement} input - The phone input element.
          * @returns {void}
          */
@@ -855,19 +871,34 @@
             const originalValue = input.value;
             const originalCursorPos = input.selectionStart;
 
-            // 1. Clean the original value
-            let cleanNumber = cleanPhoneNumber(originalValue);
+            // 1. Calculate how many digits precede the cursor in the original (clean) input.
+            const digitsBeforeCursor = originalValue.substring(0, originalCursorPos).replace(/\D/g, '').length;
             
-            // 2. Apply '0' Prefix Logic and limit length
+            // 2. Prepend '0' if needed and calculate the new clean value.
+            let cleanNumber = cleanPhoneNumber(originalValue);
+            let prependedZero = false;
+
             if (cleanNumber.length > 0 && cleanNumber[0] !== '0') {
-                 cleanNumber = '0' + cleanNumber;
+                 // Check if the first digit typed by the user was NOT '0'
+                 if (cleanNumber[0] !== '0') {
+                    cleanNumber = '0' + cleanNumber;
+                    prependedZero = true;
+                 }
             }
             const MAX_DIGITS = 10;
             cleanNumber = cleanNumber.substring(0, MAX_DIGITS);
 
-            // 3. Determine new formatted string
-            let formattedNumber = '';
+            // 3. Determine the desired cursor position in the digits string.
+            let desiredDigitPos = digitsBeforeCursor;
             
+            // If '0' was prepended, and the user's cursor was NOT at position 0, the digit count has increased by one.
+            // This is the core fix: account for the implicitly added '0' when calculating the position of the cursor's target digit.
+            if (prependedZero && originalCursorPos > 0) {
+                 desiredDigitPos = digitsBeforeCursor + 1;
+            }
+
+            // 4. Format the clean number (XXX XXX XXXX spacing)
+            let formattedNumber = '';
             if (cleanNumber.length > 0) {
                 formattedNumber += cleanNumber.substring(0, 3);
             }
@@ -878,47 +909,26 @@
                 formattedNumber += ' ' + cleanNumber.substring(6, 10);
             }
             
-            // 4. Calculate new cursor position (where cursor was, ignoring previous spaces)
-            const getSpaceCount = (str, index) => {
-                let count = 0;
-                for (let i = 0; i < index; i++) {
-                    if (str[i] === ' ') {
-                        count++;
-                    }
-                }
-                return count;
-            };
-
-            // Calculate position in the clean string
-            const cleanCursorPos = originalCursorPos - getSpaceCount(originalValue, originalCursorPos);
-
-            // Calculate new position in the formatted string, including new spaces
-            let newCursorPos = cleanCursorPos + getSpaceCount(formattedNumber, cleanCursorPos);
+            // 5. Find the corresponding cursor position in the formatted string.
+            let newCursorPos = 0;
+            let digitsCount = 0;
             
-            // If the user deletes a character, ensure the cursor doesn't jump backwards by more than 1
-            if (originalValue.length > formattedNumber.length) {
-                // If a space was deleted just before the cursor, the cursor should move one back.
-                if (originalValue[originalCursorPos - 1] === ' ' && formattedNumber[originalCursorPos - 2] !== ' ') {
-                    newCursorPos = originalCursorPos - 1;
-                } else if (originalValue[originalCursorPos - 1] !== ' ' && formattedNumber[originalCursorPos - 2] === ' '){
-                     // A digit was deleted, and the previous character is now a space (e.g. 012 345 | -> 012 34|)
-                    newCursorPos = originalCursorPos - 1; 
-                } else {
-                    newCursorPos = originalCursorPos - (originalValue.length - formattedNumber.length);
+            for(let i = 0; i < formattedNumber.length; i++) {
+                if (formattedNumber[i].match(/\d/)) {
+                    digitsCount++;
                 }
-                
-            } else if (originalValue.length < formattedNumber.length) {
-                // If the input caused a space to be added, move cursor ahead one extra step for the space.
-                if (formattedNumber[newCursorPos - 1] === ' ' && originalValue[originalCursorPos - 1] !== ' ') {
-                    newCursorPos++;
+                if (digitsCount === desiredDigitPos) {
+                    // Position after the last desired digit
+                    newCursorPos = i + 1;
+                    break;
+                }
+                if (i === formattedNumber.length - 1) {
+                    newCursorPos = formattedNumber.length;
                 }
             }
-
-            // Final safety check
+            
+            // Apply new value and position
             newCursorPos = Math.min(newCursorPos, formattedNumber.length);
-            newCursorPos = Math.max(0, newCursorPos);
-
-            // 5. Apply the new value and position
             input.value = formattedNumber;
             input.setSelectionRange(newCursorPos, newCursorPos);
         };
@@ -1159,7 +1169,22 @@
             
             // Populate new fields
             editStoreNameSelect.value = invoice.storeName || 'វិក្កយបត្រ';
-            editPaymentOptionInput.value = invoice.paymentOption || '';
+            
+            // Handle Payment Option (NEW LOGIC for dropdown)
+            const paymentOptionValue = invoice.paymentOption || 'មិនទាន់វេទឹកប្រាក់';
+            const predefinedOptions = ['AC', 'ABA', 'Wing', 'True Emoney', 'តាមអ្នកដឹក', 'មិនទាន់វេទឹកប្រាក់'];
+            
+            if (predefinedOptions.includes(paymentOptionValue)) {
+                editPaymentOptionSelect.value = paymentOptionValue;
+                editOtherPaymentContainer.classList.add('hidden');
+                editOtherPaymentInput.value = '';
+            } else {
+                // It's a custom/other payment method (e.g., "ធនាគារ Wing Bank, វីង, ផ្សេងៗ...")
+                editPaymentOptionSelect.value = 'ធនាគារផ្សេង';
+                editOtherPaymentInput.value = paymentOptionValue;
+                editOtherPaymentContainer.classList.remove('hidden');
+            }
+
             editPaymentNotesInput.value = invoice.paymentNotes || '';
 
             editDeliveryOptionSelect.value = invoice.deliveryOption || 'មិនបានជ្រើសរើស';
@@ -1177,8 +1202,15 @@
             const updatedDeliveryFee = parseFloat(editDeliveryFeeInput.value) || 0;
             // Read new fields
             const updatedStoreName = editStoreNameSelect.value;
-            const updatedPaymentOption = editPaymentOptionInput.value.trim();
             const updatedPaymentNotes = editPaymentNotesInput.value.trim();
+
+            // Resolve finalPaymentOption from the new dropdown logic
+            let finalPaymentOption;
+            if (editPaymentOptionSelect.value === 'ធនាគារផ្សេង') {
+                finalPaymentOption = editOtherPaymentInput.value.trim() || 'ធនាគារផ្សេង';
+            } else {
+                finalPaymentOption = editPaymentOptionSelect.value;
+            }
 
 
             if (!updatedCustomerName || !updatedCustomerPhone || !updatedCustomerAddress) {
@@ -1215,7 +1247,7 @@
                     deliveryFee: updatedDeliveryFee,
                     // NEW: Update fields
                     storeName: updatedStoreName,
-                    paymentOption: updatedPaymentOption,
+                    paymentOption: finalPaymentOption, // Use the new resolved value
                     paymentNotes: updatedPaymentNotes,
                     updatedAt: new Date()
                 });
@@ -1476,9 +1508,10 @@
                 const totalAmount = invoice.items.reduce((sum, item) => sum + item.total, 0) + (invoice.deliveryFee || 0);
                 const isSelected = selectedInvoiceIds.has(invoice.id); 
                 
+                // Use lastBulkPrinted to indicate any print action (individual or bulk)
                 const isPrinted = invoice.lastBulkPrinted; 
                 const printMarkIcon = isPrinted ? 
-                    `<span class="ml-2 text-green-600" title="បោះពុម្ពរួមចុងក្រោយ: ${isPrinted.toDate().toLocaleDateString('km-KH')}">
+                    `<span class="ml-2 text-green-600" title="បោះពុម្ពចុងក្រោយ: ${isPrinted.toDate().toLocaleDateString('km-KH')}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" viewBox="0 0 20 20" fill="currentColor">
                           <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 13.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                         </svg>
@@ -1701,6 +1734,8 @@
                     items: currentInvoiceItems,
                     timestamp: new Date(),
                     invoiceNumber: newInvoiceNumber,
+                    // UPDATED: Use lastBulkPrinted for individual prints too to track any print action
+                    lastBulkPrinted: shouldPrint ? new Date() : null,
                 };
                 
                 await addDoc(collection(db, `artifacts/${appId}/public/data/invoices`), invoiceData);
@@ -1738,11 +1773,11 @@
                 <div class="bg-red-50 p-3 rounded-md border border-red-200 space-y-1 text-gray-800">
                     <p><strong>លេខវិក្្កយបត្រ៖</strong> ${invoiceNumber}</p>
                     <p><strong>ឈ្មោះអតិថិជន៖</strong> ${invoice.customerName || 'N/A'}</p>
-                    <p><strong>លេខទូរស័ព្ទ៖</strong> ${invoice.customerPhone || 'N/A'}</p>
+                    <p><strong>លេខទូរស័ព្ទ៖៖</strong> ${invoice.customerPhone || 'N/A'}</p>
                     <p><strong>អាសយដ្ឋាន៖</strong> ${invoice.customerAddress || 'N/A'}</p>
                     <p><strong>ជម្រើសហាង៖៖</strong> ${invoice.storeName || 'N/A'}</p>
                     <p><strong>សរុប៖</strong> $${totalAmount.toFixed(2)}</p>
-                    <p><strong>កាលបរិច្ឆេទបញ្ជាទិញ៖</strong> ${date} (${time})</p>
+                    <p><strong>កាលបរិច្ឆេទបញ្ជាទិញ៖៖</strong> ${date} (${time})</p>
                     <p class="font-bold mt-2">ទំនិញដែលបានបញ្ជាទិញ៖</p>
                     <ul class="text-sm text-gray-700">
                         ${itemsHtml}
@@ -1950,7 +1985,7 @@
                         const values = [
                             sanitize(invoiceNumber),
                             sanitize(invoice.customerName || ''),
-                            sanitize(invoice.customerPhone || ''),
+                            sanitize(cleanPhoneNumber(invoice.customerPhone) || ''), // <<-- MODIFIED: Using cleanPhoneNumber for CSV export
                             sanitize(invoice.customerAddress || ''),
                             sanitize(invoice.storeName || ''),
                             sanitize(item.name || ''),
@@ -2049,7 +2084,7 @@
                             id: doc.id,
                             // Ensure timestamp fields are handled correctly
                             timestamp: data.timestamp || new Date(), 
-                            lastBulkPrinted: data.lastBulkPrinted || null, // NEW FIELD
+                            lastBulkPrinted: data.lastBulkPrinted || null, // Field reused for any print action
                             ...data
                         });
                     });
@@ -2167,6 +2202,19 @@
             editModal.style.display = 'none'; 
         });
 
+        // New listener for the select box in the edit modal
+        if (editPaymentOptionSelect) {
+            editPaymentOptionSelect.addEventListener('change', () => {
+                if (editPaymentOptionSelect.value === 'ធនាគារផ្សេង') {
+                    editOtherPaymentContainer.classList.remove('hidden');
+                    editOtherPaymentInput.focus();
+                } else {
+                    editOtherPaymentContainer.classList.add('hidden');
+                    editOtherPaymentInput.value = ''; // Clear custom input when not in use
+                }
+            });
+        }
+
         if (ccrOnlineCheckbox) ccrOnlineCheckbox.addEventListener('change', () => handleStoreSelection(ccrOnlineCheckbox));
         if (yl99CcrCheckbox) yl99CcrCheckbox.addEventListener('change', () => handleStoreSelection(yl99CcrCheckbox));
         if (ccr168Checkbox) ccr168Checkbox.addEventListener('change', () => handleStoreSelection(ccr168Checkbox));
@@ -2218,7 +2266,7 @@
                         <p class="text-red-600 font-bold mb-3">ការព្រមាន៖ កំណត់សម្គាល់នេះត្រូវបានប្រើប្រាស់រួចហើយ។</p>
                         <div class="bg-red-50 p-3 rounded-md border border-red-200 space-y-1 text-gray-800">
                            <p><strong>លេខវិក្្កយបត្រ៖</strong> ${conflictingInvoice.invoiceNumber || 'N/A'}</p>
-                           <p><strong>ឈ្មោះអតិថិជន៖</strong> ${conflictingInvoice.customerName || 'N/A'}</p>
+                           <p><strong>ឈ្មោះអតិថិជន៖៖</strong> ${conflictingInvoice.customerName || 'N/A'}</p>
                            <p><strong>កាលបរិច្ឆេទបញ្ជាទិញ៖</strong> ${conflictingInvoice.timestamp.toDate().toLocaleDateString('km-KH')}</p>
                         </div>
                         <p class="mt-3 text-sm text-gray-700">សូមបន្តការបញ្ចូលទិន្នន័យ។ ការត្រួតពិនិត្យចុងក្រោយនឹងធ្វើឡើងនៅពេលបោះពុម្ព។</p>
