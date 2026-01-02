@@ -189,6 +189,9 @@
                     <label for="editCustomerName" class="block text-sm font-medium text-gray-700">ឈ្មោះអតិថិជន</label>
                     <input type="text" id="editCustomerName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
                 </div>
+                
+                <!-- Removed editFacebookProfileUrl -->
+
                 <div>
                     <label for="editCustomerPhone" class="block text-sm font-medium text-gray-700">លេខទូរស័ព្ទ</label>
                     <input type="text" id="editCustomerPhone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
@@ -240,7 +243,7 @@
                 <!-- NEW: Custom Payment Input (visible if "ធនាគារផ្សេង" selected) -->
                 <div class="pt-2 hidden" id="editOtherPaymentContainer">
                     <label for="editOtherPaymentInput" class="block text-sm font-medium text-gray-700">ឈ្មោះធនាគារ/ការទូទាត់ផ្សេងទៀត</label>
-                    <input type="text" id="editOtherPaymentInput" placeholder="ឧទា: ធនាគារ Wing Bank, វីង, ផ្សេងៗ..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                    <input type="text" id="editOtherPaymentInput" placeholder="ដូចជា: ធនាគារ Wing Bank, វីង, ផ្សេងៗ..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
                 </div>
 
                 <!-- RETAINED: Payment Notes / TxD -->
@@ -375,6 +378,9 @@
                                 <label for="customerName" class="block text-sm font-medium text-gray-700">ឈ្មោះអតិថិជន</label>
                                 <input type="text" id="customerName" placeholder="ឧទា: កញ្ញា សូជីន" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2">
                             </div>
+                            
+                            <!-- Removed facebookProfileUrl -->
+
                             <div>
                                 <label for="customerPhone" class="block text-sm font-medium text-gray-700">លេខទូរស័ព្ទ</label>
                                 <input type="text" id="customerPhone" placeholder="012 345 678" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2">
@@ -458,7 +464,7 @@
                                 <!-- NEW INPUT for Other Bank/Payment Method (Conditionally visible) -->
                                 <div id="otherPaymentMethodContainer" class="hidden"> 
                                     <label for="otherPaymentMethod" class="block text-sm font-medium text-gray-700 mt-2">ឈ្មោះធនាគារ/ការទូទាត់ផ្សេងទៀត</label>
-                                    <input type="text" id="otherPaymentMethod" placeholder="ដូចជា: ធនាគារ Wing Bank, វីង, ផ្សេងៗ..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2">
+                                    <input type="text" id="otherPaymentMethod" placeholder="ដូចជា: ធនាគារ Wing Bank, វីង, ផ្សេងៗ..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
                                 </div>
 
                                 <div>
@@ -657,6 +663,19 @@
                                 <label for="searchQuery" class="block text-sm font-medium text-gray-700">ស្វែងរក</label>
                                 <input type="text" id="searchQuery" placeholder="ស្វែងរកតាមលេខវិក្កយបត្រ ឈ្មោះអតិថិជន លេខទូរស័ព្ទ ឬអាសយដ្ឋាន..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2">
                             </div>
+
+                            <!-- NEW: Sort By Dropdown -->
+                            <div>
+                                <label for="historySortBy" class="block text-sm font-medium text-gray-700">រៀបតាម</label>
+                                <select id="historySortBy" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2">
+                                    <option value="newest">កាលបរិច្ឆេទ (ថ្មីទៅចាស់)</option>
+                                    <option value="oldest">កាលបរិច្ឆេទ (ចាស់ទៅថ្មី)</option>
+                                    <option value="phnom_penh_first">ទីតាំង (ភ្នំពេញមុន)</option>
+                                    <option value="province_first">ទីតាំង (ខេត្តមុន)</option>
+                                    <option value="paid_first">ការទូទាត់ (បង់រួចមុន)</option>
+                                    <option value="unpaid_first">ការទូទាត់ (មិនទាន់បង់មុន)</option>
+                                </select>
+                            </div>
                         </div>
                         
                         <!-- UPDATED CONTROL BAR FOR MULTI-PRINT -->
@@ -755,6 +774,7 @@
         const editOtherPaymentContainer = document.getElementById('editOtherPaymentContainer'); // NEW CONTAINER
         const editOtherPaymentInput = document.getElementById('editOtherPaymentInput'); // NEW INPUT
         const editPaymentNotesInput = document.getElementById('editPaymentNotes');
+        // Removed editFacebookProfileUrlInput
 
 
         let confirmationCallback = null;
@@ -773,6 +793,8 @@
         const customerNameInput = document.getElementById('customerName');
         const customerPhoneInput = document.getElementById('customerPhone');
         const customerAddressInput = document.getElementById('customerAddress');
+        // Removed facebookProfileUrlInput
+
         const ccrOnlineCheckbox = document.getElementById('ccrOnlineCheckbox');
         const yl99CcrCheckbox = document.getElementById('yl99CcrCheckbox');
         const ccr168Checkbox = document.getElementById('ccr168Checkbox');
@@ -803,6 +825,7 @@
         const clearCurrentListBtn = document.getElementById('clearCurrentListBtn');
         const downloadDataBtn = document.getElementById('downloadDataBtn');
         const searchQueryInput = document.getElementById('searchQuery');
+        const historySortBySelect = document.getElementById('historySortBy'); // NEW Sort Select
         
         const totalSalesCountDisplay = document.getElementById('totalSalesCount');
         const totalRevenueDisplay = document.getElementById('totalRevenue');
@@ -1012,7 +1035,7 @@
             if (acCheckbox.checked) options.push('AC');
             if (abaCheckbox.checked) options.push('ABA');
             if (wingCheckbox.checked) options.push('Wing');
-            if (trueEmoneyCheckbox.checked) options.push('True Emoney'); 
+            if (trueEmoneyCheckbox.checked) options.push('True money'); 
             if (byDelivererCheckbox.checked) options.push('តាមអ្នកដឹក');
             
             if (otherBankCheckbox.checked) {
@@ -1027,6 +1050,7 @@
             customerNameInput.value = '';
             customerPhoneInput.value = '';
             customerAddressInput.value = '';
+            // Removed facebookProfileUrlInput clearing
             vetRadio.checked = false;
             jtRadio.checked = false;
             phnompenhRadio.checked = false;
@@ -1166,13 +1190,15 @@
             editCustomerNameInput.value = invoice.customerName || '';
             editCustomerPhoneInput.value = invoice.customerPhone || '';
             editCustomerAddressInput.value = invoice.customerAddress || '';
+            // Removed editFacebookProfileUrlInput population
+
             
             // Populate new fields
             editStoreNameSelect.value = invoice.storeName || 'វិក្កយបត្រ';
             
             // Handle Payment Option (NEW LOGIC for dropdown)
             const paymentOptionValue = invoice.paymentOption || 'មិនទាន់វេទឹកប្រាក់';
-            const predefinedOptions = ['AC', 'ABA', 'Wing', 'True Emoney', 'តាមអ្នកដឹក', 'មិនទាន់វេទឹកប្រាក់'];
+            const predefinedOptions = ['AC', 'ABA', 'Wing', 'True money', 'តាមអ្នកដឹក', 'មិនទាន់វេទឹកប្រាក់'];
             
             if (predefinedOptions.includes(paymentOptionValue)) {
                 editPaymentOptionSelect.value = paymentOptionValue;
@@ -1203,6 +1229,7 @@
             // Read new fields
             const updatedStoreName = editStoreNameSelect.value;
             const updatedPaymentNotes = editPaymentNotesInput.value.trim();
+            // Removed updatedFacebookProfileUrl reading
 
             // Resolve finalPaymentOption from the new dropdown logic
             let finalPaymentOption;
@@ -1249,6 +1276,7 @@
                     storeName: updatedStoreName,
                     paymentOption: finalPaymentOption, // Use the new resolved value
                     paymentNotes: updatedPaymentNotes,
+                    // Removed facebookProfileUrl update
                     updatedAt: new Date()
                 });
 
@@ -1440,10 +1468,11 @@
             const query = searchQueryInput.value.toLowerCase().trim();
             const filterStartDate = historyStartDateInput.value ? new Date(historyStartDateInput.value) : null;
             const filterEndDate = historyEndDateInput.value ? new Date(historyEndDateInput.value) : null;
+            const sortBy = historySortBySelect.value; // NEW: Get sort value
 
             selectedInvoiceIds = new Set([...selectedInvoiceIds].filter(id => historyInvoices.map(inv => inv.id).includes(id)));
 
-            const filteredInvoices = historyInvoices.filter((invoice) => {
+            let filteredInvoices = historyInvoices.filter((invoice) => {
                 const customerName = (invoice.customerName || '').toLowerCase();
                 const customerPhone = (invoice.customerPhone || '').toLowerCase();
                 const customerAddress = (invoice.customerAddress || '').toLowerCase();
@@ -1474,6 +1503,42 @@
                         
                 return matchesDate && (query.length === 0 || matchesSearch);
             });
+
+            // NEW: Sort Logic
+            filteredInvoices.sort((a, b) => {
+                const dateA = a.timestamp.toDate();
+                const dateB = b.timestamp.toDate();
+
+                switch (sortBy) {
+                    case 'newest':
+                        return dateB - dateA;
+                    case 'oldest':
+                        return dateA - dateB;
+                    case 'phnom_penh_first':
+                         if (a.deliveryOption === 'ភ្នំពេញ' && b.deliveryOption !== 'ភ្នំពេញ') return -1;
+                         if (a.deliveryOption !== 'ភ្នំពេញ' && b.deliveryOption === 'ភ្នំពេញ') return 1;
+                         return dateB - dateA; // Fallback to date
+                    case 'province_first':
+                         if (a.deliveryOption !== 'ភ្នំពេញ' && b.deliveryOption === 'ភ្នំពេញ') return -1;
+                         if (a.deliveryOption === 'ភ្នំពេញ' && b.deliveryOption !== 'ភ្នំពេញ') return 1;
+                         return dateB - dateA; // Fallback to date
+                    case 'paid_first':
+                        const paidA = isInvoicePaid(a);
+                        const paidB = isInvoicePaid(b);
+                        if (paidA && !paidB) return -1;
+                        if (!paidA && paidB) return 1;
+                        return dateB - dateA;
+                    case 'unpaid_first':
+                        const unpaidA = !isInvoicePaid(a);
+                        const unpaidB = !isInvoicePaid(b);
+                        if (unpaidA && !unpaidB) return -1;
+                        if (!unpaidA && unpaidB) return 1;
+                        return dateB - dateA;
+                    default:
+                        return dateB - dateA;
+                }
+            });
+
 
             const totalItems = filteredInvoices.length;
             const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
@@ -1517,6 +1582,8 @@
                         </svg>
                     </span>` : '';
 
+                // Facebook Profile Image Logic Removed
+
 
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'bg-gray-100 rounded-lg shadow-sm p-4 hover:bg-gray-200 transition-colors duration-300 relative';
@@ -1539,18 +1606,22 @@
                            style="transform: scale(1.2);">
 
                     <div class="flex justify-between items-start mb-4 ml-8"> <!-- Added ml-8 for checkbox space -->
-                        <div>
-                            <p class="font-bold text-gray-800">លេខវិក្កយបត្រ: ${invoice.invoiceNumber || 'N/A'}</p>
-                            <!-- Print mark added here -->
-                            <p class="text-sm text-gray-600">សរុប: <strong class="text-base text-green-700">$${totalAmount.toFixed(2)}${printMarkIcon}</strong></p>
-                            <p class="text-sm text-gray-600">អតិថិជន: ${invoice.customerName || 'N/A'}</p>
-                            <p class="text-sm text-gray-600">ទូរស័ព្ទ: ${invoice.customerPhone || 'N/A'}</p>
-                            <p class="text-sm text-gray-600">អាសយដ្ឋាន: ${invoice.customerAddress || 'N/A'}</p>
-                            <p class="text-xs text-gray-500 mt-2">${invoiceDate} (${invoiceTime})</p>
-                            <p class="text-xs text-gray-500">ហាង: ${invoice.storeName || 'N/A'}</p>
-                            <p class="text-xs text-gray-500">កំណត់សម្គាល់/TxD: ${invoice.paymentNotes || 'គ្មាន'}</p>
+                        <div class="flex items-start w-full"> <!-- Flex container for Image + Text -->
+                            
+                            <div class="flex-grow">
+                                <p class="font-bold text-gray-800">លេខវិក្កយបត្រ: ${invoice.invoiceNumber || 'N/A'}</p>
+                                <!-- Print mark added here -->
+                                <p class="text-sm text-gray-600">សរុប: <strong class="text-base text-green-700">$${totalAmount.toFixed(2)}${printMarkIcon}</strong></p>
+                                <p class="text-sm text-gray-600">អតិថិជន: ${invoice.customerName || 'N/A'}</p>
+                                <p class="text-sm text-gray-600">ទូរស័ព្ទ: ${invoice.customerPhone || 'N/A'}</p>
+                                <p class="text-sm text-gray-600">អាសយដ្ឋាន: ${invoice.customerAddress || 'N/A'}</p>
+                                <p class="text-xs text-gray-500 mt-2">${invoiceDate} (${invoiceTime})</p>
+                                <p class="text-xs text-gray-500">ហាង: ${invoice.storeName || 'N/A'}</p>
+                                <p class="text-xs text-gray-500">កំណត់សម្គាល់/TxD: ${invoice.paymentNotes || 'គ្មាន'}</p>
+                            </div>
                         </div>
-                        <div class="flex gap-2">
+                        
+                        <div class="flex gap-2 flex-shrink-0 ml-2">
                             <button class="edit-invoice text-orange-600 hover:text-orange-800" data-doc-id="${invoice.id}" title="កែប្រែព័ត៌ពីអតិថិជន">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zm-3.136 9.142l-.788.788-5.61 5.61a1 1 0 01-1.414 0l-1.414-1.414a1 1 0 010-1.414l5.61-5.61.788-.788 4.243 4.243z" />
@@ -1736,13 +1807,14 @@
                     invoiceNumber: newInvoiceNumber,
                     // UPDATED: Use lastBulkPrinted for individual prints too to track any print action
                     lastBulkPrinted: shouldPrint ? new Date() : null,
+                    // Removed facebookProfileUrl field
                 };
                 
                 await addDoc(collection(db, `artifacts/${appId}/public/data/invoices`), invoiceData);
                 
                 if (shouldPrint) {
                     printInvoice(invoiceData, newInvoiceNumber);
-                    showMessage('វិក្្កយបត្រត្រូវបានបោះពុម្ព និងទិន្នន័យត្រូវបានរក្សាទុកដោយជោគជ័យ។');
+                    showMessage('វិក័យប័ត្រត្រូវបានបោះពុម្ព និងទិន្នន័យត្រូវបានរក្សាទុកដោយជោគជ័យ។');
                 } else {
                     showMessage('ទិន្នន័យត្រូវបានរក្សាទុកដោយជោគជ័យ។');
                 }
@@ -1875,7 +1947,7 @@
 
 
             let invoiceHTML = `
-                <div class="invoice-print-section" style="width: 80mm; margin: 0 auto; padding: 5mm; box-sizing: border-box; font-family: 'Khmer OS Battambang', 'Khmer OS', sans-serif;">
+                <div class="invoice-print-section" style="width: 80mm; margin-left: -6mm; margin-right: 4mm; padding: 5mm; box-sizing: border-box; font-family: 'Khmer OS Battambang', 'Khmer OS', sans-serif;">
                     <h1 style="font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 5mm;">${storeName}</h1>
                     <div style="font-size: 14px; line-height: 1.5; margin-bottom: 5mm;">
                         <p style="margin: 0; font-weight: bold; text-align: center;">${invoiceNumber}</p>
@@ -1899,10 +1971,10 @@
                         <tbody>
             `;
 
-            invoiceData.items.forEach(item => {
+            invoiceData.items.forEach((item, index) => {
                 invoiceHTML += `
                     <tr>
-                        <td style="padding: 2px 0;">${item.name}</td>
+                        <td style="padding: 2px 0;">(${index + 1}) ${item.name}</td>
                         <td style="text-align: right; padding: 2px 0;">${item.quantity}</td>
                         <td style="text-align: right; padding: 2px 0;">$${item.price.toFixed(2)}</td>
                         <td style="text-align: right; padding: 2px 0;">$${item.total.toFixed(2)}</td>
@@ -2212,6 +2284,14 @@
                     editOtherPaymentContainer.classList.add('hidden');
                     editOtherPaymentInput.value = ''; // Clear custom input when not in use
                 }
+            });
+        }
+        
+        // --- NEW SORT LISTENER ---
+        if (historySortBySelect) {
+            historySortBySelect.addEventListener('change', () => {
+                currentPage = 1; // Reset to page 1 on sort change
+                renderHistoryList();
             });
         }
 
