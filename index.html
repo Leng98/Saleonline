@@ -1948,24 +1948,24 @@
 
             let invoiceHTML = `
                 <div class="invoice-print-section" style="width: 80mm; margin-left: -6mm; margin-right: 4mm; padding: 5mm; box-sizing: border-box; font-family: 'Khmer OS Battambang', 'Khmer OS', sans-serif;">
-                    <h1 style="font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 5mm;">${storeName}</h1>
-                    <div style="font-size: 14px; line-height: 1.5; margin-bottom: 5mm;">
+                    <h1 style="font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 2mm;">${storeName}</h1>
+                    <div style="font-size: 14px; line-height: 1.5; margin-bottom: 2mm;">
                         <p style="margin: 0; font-weight: bold; text-align: center;">${invoiceNumber}</p>
                         <p style="margin: 0;">ឈ្មោះអតិថិជន: <strong>${customerName}</strong></p>
-                        <p style="margin: 0;">លេខទូរស័ព្ទ: <strong style="font-size: 16px;">${customerPhone}</strong></p>
-                        <p style="margin: 0;">អាសយដ្ឋាន: <strong style="font-size: 16px;">${customerAddress}</strong></p>
+                        <p style="margin: 0;">លេខទូរស័ព្ទ: <strong style="font-size: 15px;">${customerPhone}</strong></p>
+                        <p style="margin: 0;">អាសយដ្ឋាន: <strong style="font-size: 15px;">${customerAddress}</strong></p>
                         <p style="margin: 0;">ដឹកតាម: <strong>${deliveryOption}</strong> | ទូទាត់: <strong>${paymentOption}${delivererAmountDisplay}</strong></p>
                         <p style="margin: 0;">កំណត់សម្គាល់: <strong>${paymentNotes}</strong></p>
-                        <p style="margin: 0; text-align: center;"><strong>${formattedDate} (${formattedTime})</strong></p>
+                        <p style="margin: 0; text-align: center; margin-top: 2px;"><strong>${formattedDate} (${formattedTime})</strong></p>
                     </div>
-                    <hr style="border-top: 1px dashed #000; margin-bottom: 5mm;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                    <hr style="border-top: 1px dashed #000; margin-bottom: 2mm;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.5;">
                         <thead>
                             <tr>
                                 <th style="text-align: left; font-weight: bold; padding: 2px 0;">ឈ្មោះទំនិញ</th>
                                 <th style="text-align: right; font-weight: bold; padding: 2px 0; width: 10mm;">ចំនួន</th>
-                                <th style="text-align: right; font-weight: bold; padding: 2px 0; width: 15mm;">តម្លៃ</th>
-                                <th style="text-align: right; font-weight: bold; padding: 2px 0; width: 15mm;">សរុប</th>
+                                <!-- Removed Price Column -->
+                                <th style="text-align: right; font-weight: bold; padding: 2px 0; width: 20mm;">សរុប</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1974,10 +1974,15 @@
             invoiceData.items.forEach((item, index) => {
                 invoiceHTML += `
                     <tr>
-                        <td style="padding: 2px 0;">(${index + 1}) ${item.name}</td>
-                        <td style="text-align: right; padding: 2px 0;">${item.quantity}</td>
-                        <td style="text-align: right; padding: 2px 0;">$${item.price.toFixed(2)}</td>
-                        <td style="text-align: right; padding: 2px 0;">$${item.total.toFixed(2)}</td>
+                        <td style="padding: 2px 0; vertical-align: top;">
+                            <div style="display: flex;">
+                                <span style="white-space: nowrap; margin-right: 5px;">(${index + 1})</span>
+                                <span>${item.name}</span>
+                            </div>
+                        </td>
+                        <td style="text-align: right; padding: 2px 0; vertical-align: top;">${item.quantity}</td>
+                        <!-- Removed Price Cell -->
+                        <td style="text-align: right; padding: 2px 0; vertical-align: top;">$${item.total.toFixed(2)}</td>
                     </tr>
                 `;
             });
@@ -1986,15 +1991,15 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="3" style="text-align: right; font-weight: bold; padding-top: 5mm;">តម្លៃទំនិញសរុប:</td>
+                                <td colspan="2" style="text-align: right; font-weight: bold; padding-top: 5mm;">តម្លៃទំនិញសរុប:</td>
                                 <td style="text-align: right; font-weight: bold; padding-top: 5mm;">$${salesTotal.toFixed(2)}</td>
                             </tr>
                               <tr>
-                                <td colspan="3" style="text-align: right; font-weight: bold; padding-top: 2px;">តម្លៃសេវាដឹក:</td>
+                                <td colspan="2" style="text-align: right; font-weight: bold; padding-top: 2px;">តម្លៃសេវាដឹក:</td>
                                 <td style="text-align: right; font-weight: bold; padding-top: 2px;">$${deliveryFee.toFixed(2)}</td>
                             </tr>
                             <tr>
-                                <td colspan="3" style="text-align: right; font-weight: bold; padding-top: 2px; font-size: 16px;">តម្លៃសរុបទាំងអស់:</td>
+                                <td colspan="2" style="text-align: right; font-weight: bold; padding-top: 2px; font-size: 16px;">តម្លៃសរុបទាំងអស់:</td>
                                 <td style="text-align: right; font-weight: bold; padding-top: 2px; font-size: 16px;">$${finalTotal.toFixed(2)}</td>
                             </tr>
                         </tfoot>
@@ -2006,6 +2011,7 @@
             printWindow.document.write('<html><head><title>វិក្្កយបត្រ</title>');
             printWindow.document.write('<style>');
             printWindow.document.write('@page { size: 80mm auto; margin: 0; }');
+            // UPDATED: Set font size to 14px in global print style as well
             printWindow.document.write('body{font-family: "Khmer OS Battambang", Arial, sans-serif; font-size: 14px;} table{width: 100%; border-collapse: collapse;} th, td{padding: 2px 0; text-align: left;}');
             printWindow.document.write('</style>');
             printWindow.document.write('</head><body>');
